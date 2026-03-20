@@ -1,0 +1,103 @@
+#pragma once
+
+#include "random.h"
+
+#include <algorithm>
+#include <array>
+#include <bit>
+#include <cmath>
+#include <cstdint>
+#include <numeric>
+#include <type_traits>
+
+namespace lightrand {
+namespace detail {
+
+struct vec2 {
+  static float dot(const vec2 &a, const vec2 &b) {
+    return a.x * b.x + a.y * b.y;
+  }
+  void normalize() {
+    auto d = dot(*this, *this);
+    x /= std::sqrtf(d);
+    y /= std::sqrtf(d);
+  }
+
+  float x, y;
+};
+
+struct vec3 {
+  static float dot(const vec3 &a, const vec3 &b) {
+    return a.x * b.x + a.y * b.y + a.z * b.z;
+  }
+  void normalize() {
+    auto d = dot(*this, *this);
+    x /= std::sqrtf(d);
+    y /= std::sqrtf(d);
+    z /= std::sqrtf(d);
+  }
+
+  float x, y, z;
+};
+
+template <typename GradientType, std::uint32_t TABLE_SIZE>
+class gradient_table {
+  static_assert(std::has_single_bit(TABLE_SIZE),
+                "TABLE_SIZE must be a power of 2");
+
+private:
+  std::array<GradientType, TABLE_SIZE> grad;
+  std::array<std::uint32_t, TABLE_SIZE * 2> perm;
+
+public:
+  gradient_table(generator &gen) {
+    init_gradients(gen);
+
+    std::iota(perm.begin(), perm.begin() + TABLE_SIZE, 0);
+    std::shuffle(perm.begin(), perm.begin() + TABLE_SIZE, gen.eng());
+    std::copy(perm.begin(), perm.begin() + TABLE_SIZE,
+              perm.begin() + TABLE_SIZE);
+  }
+
+  const GradientType &operator()(std::uint32_t hx) const {
+    return grad[perm[hx]];
+  }
+
+  const GradientType &operator()(std::uint32_t hx, std::uint32_t hy) const {
+    return grad[perm[perm[hx] + hy]];
+  }
+
+  const GradientType &operator()(std::uint32_t hx, std::uint32_t hy,
+                                 std::uint32_t hz) const {
+    return grad[perm[perm[perm[hx] + hy] + hz]];
+  }
+
+private:
+  void init_gradients(generator &gen) {
+    if constexpr (std::is_same_v<GradientType, float>) {
+      for (auto &g : grad) {
+        do {
+          g = gen.normal<float>();
+        } while (g == 0.0f);
+        g = std::copysign(1.0f, g);
+      }
+    } else if constexpr (std::is_same_v<GradientType, vec2>) {
+      for (auto &g : grad) {
+        do {
+          g = {gen.normal<float>(), gen.normal<float>()};
+        } while (g.x == 0.0f && g.y == 0.0f);
+        g.normalize();
+      }
+    } else if constexpr (std::is_same_v<GradientType, vec3>) {
+      for (auto &g : grad) {
+        do {
+          g = {gen.normal<float>(), gen.normal<float>(), gen.normal<float>()};
+        } while (g.x == 0.0f && g.y == 0.0f && g.z == 0.0f);
+        g.normalize();
+      }
+    }
+  }
+};
+
+} // namespace detail
+} // namespace lightrand
