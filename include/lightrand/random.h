@@ -167,13 +167,21 @@ constexpr double R = 3.6541528853610088;
 extern const double x[];
 } // namespace ziggurat
 
-namespace detail {
-template <typename Derived> class random_generator {
+class generator {
 protected:
-  random_generator() = default;
+  engine &urbg_;
 
 public:
-  std::uint64_t random() { return static_cast<Derived *>(this)->random(); }
+  generator(std::uint64_t s = 0xc0ffeef00d, engine &eng = global_urbg)
+      : urbg_(eng) {
+    seed(s);
+  }
+
+  void seed(std::uint64_t s) { urbg_.seed(s); }
+
+  engine &eng() { return urbg_; }
+
+  std::uint64_t random() { return urbg_(); }
 
   template <std::integral T> T uniform(T lo, T hi) {
     if (lo >= hi)
@@ -270,24 +278,6 @@ public:
   template <std::floating_point T> T normal(T mean, T stddev) {
     return mean + stddev * normal<T>();
   }
-};
-} // namespace detail
-
-class generator : public detail::random_generator<generator> {
-protected:
-  engine &urbg_;
-
-public:
-  generator(std::uint64_t s = 0xc0ffeef00d, engine &eng = global_urbg)
-      : urbg_(eng) {
-    seed(s);
-  }
-
-  void seed(std::uint64_t s) { urbg_.seed(s); }
-
-  engine &eng() { return urbg_; }
-
-  std::uint64_t random() { return urbg_(); }
 };
 
 } // namespace lightrand
