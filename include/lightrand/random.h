@@ -165,6 +165,7 @@ namespace ziggurat {
 constexpr unsigned N = 256;
 constexpr double R = 3.6541528853610088;
 extern const double x[];
+extern const double y[];
 } // namespace ziggurat
 
 class generator {
@@ -229,6 +230,8 @@ public:
    */
   template <std::floating_point T> T normal() {
     const auto &zx = ziggurat::x;
+    const auto &zy = ziggurat::y;
+
     for (;;) {
       // Choose the box number `i`.
       // Ziggurat N is 256 (power of 2), so we can optimize the index
@@ -257,9 +260,7 @@ public:
       // `x` is in an area where the box is partially above the curve.
       // Choose a random `y` between y[i] and y[i+1]
       u = uniform<double>();
-      auto f0 = std::exp(-0.5 * zx[i] * zx[i]);
-      auto f1 = std::exp(-0.5 * zx[i + 1] * zx[i + 1]);
-      auto y = f0 + u * (f1 - f0);
+      auto y = zy[i] + u * (zy[i + 1] - zy[i]);
 
       // Accept if the point (x, y) is below the curve.
       if (y < std::exp(-0.5 * x * x))
