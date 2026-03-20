@@ -3,11 +3,11 @@
 #include <array>
 #include <bit>
 #include <cmath>
+#include <concepts>
 #include <cstdint>
 #include <iostream>
 #include <limits>
 #include <numeric>
-#include <type_traits>
 
 namespace lightrand {
 
@@ -175,9 +175,7 @@ protected:
 public:
   std::uint64_t random() { return static_cast<Derived *>(this)->random(); }
 
-  template <typename T>
-    requires std::is_integral_v<T>
-  T uniform(T lo, T hi) {
+  template <std::integral T> T uniform(T lo, T hi) {
     if (lo >= hi)
       return lo;
 
@@ -196,9 +194,7 @@ public:
     return static_cast<T>(static_cast<std::uint64_t>(lo) + (u % (range + 1)));
   }
 
-  template <typename T>
-    requires std::is_floating_point_v<T>
-  T uniform() {
+  template <std::floating_point T> T uniform() {
     constexpr int bits = std::numeric_limits<T>::digits < 64
                              ? std::numeric_limits<T>::digits
                              : 64;
@@ -208,9 +204,7 @@ public:
     return static_cast<T>(random() >> shift) / divisor;
   }
 
-  template <typename T>
-    requires std::is_floating_point_v<T>
-  T uniform(T lo, T hi) {
+  template <std::floating_point T> T uniform(T lo, T hi) {
     if (lo >= hi)
       return lo;
 
@@ -225,9 +219,7 @@ public:
    * @tparam T The floating-point type of the generated value.
    * @return A normally distributed random floating-point number.
    */
-  template <typename T>
-    requires std::is_floating_point_v<T>
-  T normal() {
+  template <std::floating_point T> T normal() {
     const auto &zx = ziggurat::x;
     for (;;) {
       // Choose the box number `i`.
@@ -275,9 +267,7 @@ public:
    * @param stddev The standard deviation of the distribution.
    * @return A normally distributed random floating-point number.
    */
-  template <typename T>
-    requires std::is_floating_point_v<T>
-  T normal(T mean, T stddev) {
+  template <std::floating_point T> T normal(T mean, T stddev) {
     return mean + stddev * normal<T>();
   }
 };
