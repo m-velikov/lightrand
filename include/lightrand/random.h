@@ -165,7 +165,6 @@ namespace ziggurat {
 constexpr unsigned N = 256;
 constexpr double R = 3.6541528853610088;
 extern const double x[];
-extern const double y[];
 } // namespace ziggurat
 
 /**
@@ -292,7 +291,6 @@ public:
    */
   template <std::floating_point T> T normal() {
     const auto &zx = ziggurat::x;
-    const auto &zy = ziggurat::y;
 
     for (;;) {
       // Choose a uniformly distributed 64-bit integer.
@@ -328,10 +326,11 @@ public:
 
       // `x` is in an area where the box is partially above the curve.
       // Choose a random `y` between y[i] and y[i+1]
-      auto y = std::lerp(zy[i], zy[i + 1], uniform<double>());
+      auto f = [](double x) { return std::exp(-0.5 * x * x); };
+      auto y = std::lerp(f(zx[i]), f(zx[i + 1]), uniform<double>());
 
       // Accept if the point (x, y) is below the curve.
-      if (y < std::exp(-0.5 * x * x))
+      if (y < f(x))
         return static_cast<T>(negative ? -x : x);
     }
   }
