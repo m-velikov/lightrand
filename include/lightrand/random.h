@@ -168,31 +168,74 @@ extern const double x[];
 extern const double y[];
 } // namespace ziggurat
 
+/**
+ * @brief A high-level random number generator interface.
+ *
+ * This class provides convenient methods to generate uniformly and
+ * normally distributed random numbers (both integers and floating-point).
+ * It wraps around an underlying uniform random bit generator (URBG) engine.
+ */
 class generator {
 protected:
   engine &urbg_;
 
 public:
+  /**
+   * @brief Constructs a random number generator.
+   *
+   * @param s An optional seed value used to initialize the generator.
+   * @param eng The underlying uniform random bit generator (URBG) engine.
+   */
   generator(std::uint64_t s = 0xc0ffeef00d, engine &eng = global_urbg)
       : urbg_(eng) {
     seed(s);
   }
 
+  /**
+   * @brief Seeds the underlying random number generator.
+   *
+   * @param s The new seed value.
+   */
   void seed(std::uint64_t s) { urbg_.seed(s); }
 
+  /**
+   * @brief Accesses the underlying uniform random bit generator engine.
+   *
+   * @return A reference to the underlying engine.
+   */
   engine &eng() { return urbg_; }
 
+  /**
+   * @brief Generates a raw 64-bit random integer from the engine.
+   *
+   * @return A uniformly distributed 64-bit unsigned integer.
+   */
   std::uint64_t random() { return urbg_(); }
 
+  /**
+   * @brief Generates a uniformly distributed random integer in the closed
+   * interval [lo, hi].
+   *
+   * This function uses rejection sampling to guarantee a perfect uniform
+   * distribution and completely eliminate modulo bias.
+   *
+   * @tparam T The integral type of the generated value.
+   * @param lo The lower bound of the range (inclusive).
+   * @param hi The upper bound of the range (inclusive).
+   * @return A uniformly distributed random integer.
+   */
   template <std::integral T> T uniform(T lo, T hi) {
     if (lo >= hi)
       return lo;
 
+    // Calculate the total number of bounds (the distance between lo and hi)
     std::uint64_t range =
         static_cast<std::uint64_t>(hi) - static_cast<std::uint64_t>(lo);
     if (range == std::numeric_limits<std::uint64_t>::max())
       return static_cast<T>(random());
 
+    // Calculate the highest multiple of (range + 1) that fits into a uint64_t.
+    // Numbers above or equal to this limit are rejected to avoid modulo bias.
     std::uint64_t limit =
         (std::numeric_limits<std::uint64_t>::max() / (range + 1)) * (range + 1);
 
@@ -203,16 +246,40 @@ public:
     return static_cast<T>(static_cast<std::uint64_t>(lo) + (u % (range + 1)));
   }
 
+  /**
+   * @brief Generates a uniformly distributed random floating-point number in
+   * [0.0, 1.0).
+   *
+   * Carefully extracts the correct number of random bits based on the requested
+   * floating-point type's mantissa to safely avoid precision loss or rounding
+   * bugs.
+   *
+   * @tparam T The floating-point type of the generated value.
+   * @return A uniformly distributed random floating-point number.
+   */
   template <std::floating_point T> T uniform() {
+    // Use exactly the number of bits that the floating point type's mantissa
+    // can represent
     constexpr int bits = std::numeric_limits<T>::digits < 64
                              ? std::numeric_limits<T>::digits
                              : 64;
+    // Number of bits to discard from the 64-bit random integer
     constexpr int shift = 64 - bits;
+    // The divisor needed to normalize the integer into the [0, 1) range
     constexpr T divisor = static_cast<T>(1ULL << (bits - 1)) * 2.0;
 
     return static_cast<T>(random() >> shift) / divisor;
   }
 
+  /**
+   * @brief Generates a uniformly distributed random floating-point number in
+   * the interval [lo, hi).
+   *
+   * @tparam T The floating-point type of the generated value.
+   * @param lo The lower bound of the range (inclusive).
+   * @param hi The upper bound of the range (exclusive).
+   * @return A uniformly distributed random floating-point number.
+   */
   template <std::floating_point T> T uniform(T lo, T hi) {
     if (lo >= hi)
       return lo;
