@@ -14,9 +14,25 @@ TEST(SplitMix64Test, Determinism) {
     EXPECT_EQ(gen1(), gen2());
 }
 
+TEST(SplitMix64Test, DefaultSeed) {
+  lightrand::splitmix64 gen1;
+  lightrand::splitmix64 gen2(0xcafebabe);
+
+  for (int i = 0; i < 100; ++i)
+    EXPECT_EQ(gen1(), gen2());
+}
+
 TEST(Xoshiro256StarStarTest, Determinism) {
   lightrand::xoshiro256starstar gen1(1337);
   lightrand::xoshiro256starstar gen2(1337);
+
+  for (int i = 0; i < 100; ++i)
+    EXPECT_EQ(gen1(), gen2());
+}
+
+TEST(Xoshiro256StarStarTest, DefaultSeed) {
+  lightrand::xoshiro256starstar gen1;
+  lightrand::xoshiro256starstar gen2(0xc0ffeef00d);
 
   for (int i = 0; i < 100; ++i)
     EXPECT_EQ(gen1(), gen2());
@@ -39,6 +55,16 @@ TEST(GeneratorTest, Determinism) {
   }
 }
 
+TEST(GeneratorTest, DefaultConstructor) {
+  // Instantiates with default seed (0xc0ffeef00d) and default engine
+  // (global_urbg)
+  lightrand::generator gen;
+
+  int val = gen.uniform<int>(10, 20);
+  EXPECT_GE(val, 10);
+  EXPECT_LE(val, 20);
+}
+
 TEST(GeneratorTest, UniformIntLimits) {
   lightrand::generator gen(12345);
   int min_val = 10;
@@ -48,6 +74,17 @@ TEST(GeneratorTest, UniformIntLimits) {
     int val = gen.uniform<int>(min_val, max_val);
     EXPECT_GE(val, min_val);
     EXPECT_LE(val, max_val);
+  }
+}
+
+TEST(GeneratorTest, UniformIntDefaultHi) {
+  lightrand::generator gen(12345);
+  int min_val = std::numeric_limits<int>::max() - 100;
+
+  for (int i = 0; i < 1000; ++i) {
+    int val = gen.uniform<int>(min_val);
+    EXPECT_GE(val, min_val);
+    EXPECT_LE(val, std::numeric_limits<int>::max());
   }
 }
 
@@ -77,6 +114,17 @@ TEST(GeneratorTest, UniformFloatCustomRange) {
   }
 }
 
+TEST(GeneratorTest, UniformFloatDefaultHi) {
+  lightrand::generator gen(12345);
+  double min_val = 0.5;
+
+  for (int i = 0; i < 1000; ++i) {
+    double val = gen.uniform<double>(min_val);
+    EXPECT_GE(val, min_val);
+    EXPECT_LE(val, 1.0);
+  }
+}
+
 TEST(GeneratorTest, NormalDistributionStats) {
   lightrand::generator gen(12345);
 
@@ -97,6 +145,30 @@ TEST(GeneratorTest, NormalDistributionStats) {
   double stddev = std::sqrt(variance);
 
   // Verify with a small tolerance margin due to the nature of randomness
+  EXPECT_NEAR(mean, expected_mean, 0.05);
+  EXPECT_NEAR(stddev, expected_stddev, 0.05);
+}
+
+TEST(GeneratorTest, NormalDefaultStddev) {
+  lightrand::generator gen(12345);
+
+  double sum = 0.0;
+  double sq_sum = 0.0;
+  const int n = 100000;
+  const double expected_mean = 5.0;
+  const double expected_stddev = 1.0;
+
+  for (int i = 0; i < n; ++i) {
+    // Pass only the mean, leaving standard deviation defaulted to 1.0
+    double val = gen.normal<double>(expected_mean);
+    sum += val;
+    sq_sum += val * val;
+  }
+
+  double mean = sum / n;
+  double variance = (sq_sum / n) - (mean * mean);
+  double stddev = std::sqrt(variance);
+
   EXPECT_NEAR(mean, expected_mean, 0.05);
   EXPECT_NEAR(stddev, expected_stddev, 0.05);
 }

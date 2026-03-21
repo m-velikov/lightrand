@@ -225,7 +225,8 @@ public:
    * @param hi The upper bound of the range (inclusive).
    * @return A uniformly distributed random integer.
    */
-  template <std::integral T> T uniform(T lo, T hi) {
+  template <std::integral T>
+  T uniform(T lo, T hi = std::numeric_limits<T>::max()) {
     // Calculate the total number of bounds (the distance between lo and hi)
     std::uint64_t range =
         static_cast<std::uint64_t>(hi) - static_cast<std::uint64_t>(lo);
@@ -278,7 +279,7 @@ public:
    * @param hi The upper bound of the range (exclusive).
    * @return A uniformly distributed random floating-point number.
    */
-  template <std::floating_point T> T uniform(T lo, T hi) {
+  template <std::floating_point T> T uniform(T lo, T hi = static_cast<T>(1.0)) {
     return std::lerp(lo, hi, uniform<T>());
   }
 
@@ -351,7 +352,8 @@ public:
    * @param stddev The standard deviation of the distribution.
    * @return A normally distributed random floating-point number.
    */
-  template <std::floating_point T> T normal(T mean, T stddev) {
+  template <std::floating_point T>
+  T normal(T mean, T stddev = static_cast<T>(1.0)) {
     return mean + stddev * normal<T>();
   }
 };
