@@ -225,9 +225,6 @@ public:
    * @return A uniformly distributed random integer.
    */
   template <std::integral T> T uniform(T lo, T hi) {
-    if (lo >= hi)
-      return lo;
-
     // Calculate the total number of bounds (the distance between lo and hi)
     std::uint64_t range =
         static_cast<std::uint64_t>(hi) - static_cast<std::uint64_t>(lo);
@@ -281,10 +278,7 @@ public:
    * @return A uniformly distributed random floating-point number.
    */
   template <std::floating_point T> T uniform(T lo, T hi) {
-    if (lo >= hi)
-      return lo;
-
-    return lo + uniform<T>() * (hi - lo);
+    return std::lerp(lo, hi, uniform<T>());
   }
 
   /**
