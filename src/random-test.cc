@@ -154,7 +154,7 @@ TEST(GeneratorTest, NormalDefaultStddev) {
 
   double sum = 0.0;
   double sq_sum = 0.0;
-  const int n = 100000;
+  const int n = 1000000;
   const double expected_mean = 5.0;
   const double expected_stddev = 1.0;
 

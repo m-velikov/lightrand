@@ -49,19 +49,18 @@ int main() {
   std::cout << "#include <cstdint>\n\n"
                "namespace lightrand {\n"
                "namespace ziggurat {\n\n";
-#if 0
-  // The `x` table is not used in the current implementation
+
   std::cout << "extern const double x[] = {\n";
   for (auto i = 0u; i <= N; ++i)
     std::cout << std::format("  0x{:a}, // {:.17g}\n", x[i], x[i]);
   std::cout << "};\n\n";
-#endif
 
   std::cout << "extern const double y[] = {\n";
   for (auto i = 0u; i <= N; ++i)
     std::cout << std::format("  0x{:a}, // {:.17g}\n", y[i], y[i]);
   std::cout << "};\n\n";
-
+#if 0
+// The `k`  and `w` tables are not used in the current implementation
   std::cout << "extern const std::uint64_t k[] = {\n";
   for (auto i = 0u; i < N; ++i)
     std::cout << std::format("  0x{:x},\n", k[i]);
@@ -71,6 +70,6 @@ int main() {
   for (auto i = 0u; i <= N; ++i)
     std::cout << std::format("  0x{:a}, // {:.17g}\n", w[i], w[i]);
   std::cout << "};\n\n";
-
+#endif
   std::cout << "} // namespace ziggurat\n} // namespace lightrand\n";
 }
