@@ -1,6 +1,7 @@
 
 // Generate tables for the Ziggurat algorithm with 256 levels.
 #include <cmath>
+#include <cstdint>
 #include <format>
 #include <iostream>
 
@@ -15,6 +16,8 @@ constexpr double V = 0.00492867323399;
 constexpr unsigned N = 256;
 double x[N + 1];
 double y[N + 1];
+std::uint64_t k[N];
+double w[N + 1];
 
 int main() {
 #ifdef _WIN32
@@ -37,15 +40,37 @@ int main() {
     y[i] = f(x[i]);
   }
 
-  std::cout << "namespace lightrand {\n"
-               "namespace ziggurat {\n\n"
-               "extern const double x[] = {\n";
+  for (auto i = 0u; i < N; ++i)
+    k[i] = static_cast<std::uint64_t>(std::floor(0x1p64 * (x[i + 1] / x[i])));
+
+  for (auto i = 0u; i <= N; ++i)
+    w[i] = x[i] / 0x1p64;
+
+  std::cout << "#include <cstdint>\n\n"
+               "namespace lightrand {\n"
+               "namespace ziggurat {\n\n";
+#if 0
+  // The `x` table is not used in the current implementation
+  std::cout << "extern const double x[] = {\n";
   for (auto i = 0u; i <= N; ++i)
     std::cout << std::format("  0x{:a}, // {:.17g}\n", x[i], x[i]);
-  std::cout << "};\n\n"
-               "extern const double y[] = {\n";
+  std::cout << "};\n\n";
+#endif
+
+  std::cout << "extern const double y[] = {\n";
   for (auto i = 0u; i <= N; ++i)
     std::cout << std::format("  0x{:a}, // {:.17g}\n", y[i], y[i]);
-  std::cout << "};\n\n"
-               "} // namespace ziggurat\n} // namespace lightrand\n";
+  std::cout << "};\n\n";
+
+  std::cout << "extern const std::uint64_t k[] = {\n";
+  for (auto i = 0u; i < N; ++i)
+    std::cout << std::format("  0x{:x},\n", k[i]);
+  std::cout << "};\n\n";
+
+  std::cout << "extern const double w[] = {\n";
+  for (auto i = 0u; i <= N; ++i)
+    std::cout << std::format("  0x{:a}, // {:.17g}\n", w[i], w[i]);
+  std::cout << "};\n\n";
+
+  std::cout << "} // namespace ziggurat\n} // namespace lightrand\n";
 }

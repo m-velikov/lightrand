@@ -164,8 +164,9 @@ extern thread_local xoshiro256starstar thread_urbg;
 namespace ziggurat {
 constexpr unsigned N = 256;
 constexpr double R = 3.6541528853610088;
-extern const double x[];
 extern const double y[];
+extern const std::uint64_t k[];
+extern const double w[];
 } // namespace ziggurat
 
 /**
@@ -290,24 +291,35 @@ public:
    * @return A normally distributed random floating-point number.
    */
   template <std::floating_point T> T normal() {
-    const auto &zx = ziggurat::x;
     const auto &zy = ziggurat::y;
+    const auto &zk = ziggurat::k;
+    const auto &zw = ziggurat::w;
 
     for (;;) {
-      // Choose the box number `i`.
+      // Choose a uniformly distributed 64-bit integer.
+      auto r = random();
+      // Bits 0-7 select the box number `i`.
       // Ziggurat N is 256 (power of 2), so we can optimize the index
-      // generation.
-      auto i = static_cast<unsigned>(random() & (ziggurat::N - 1));
+      // generation without bias.
+      auto i = static_cast<unsigned>(r & (ziggurat::N - 1));
 
-      // Choose an `x` coordinate.
-      auto u = 2.0 * uniform<double>() - 1.0;
-      auto x = u * zx[i];
+      // Bit 8 selects the sign of the result.
+      // auto sign = (r & ziggurat::N) ? T{-1.0} : T{1.0};
+      bool negative = (r & ziggurat::N) != 0;
 
-      // If `x` is below `zx[i+1]`, it's certainly below the curve.
-      if (std::fabs(x) < zx[i + 1])
-        return static_cast<T>(x);
+      // The rest of the bits are interpreted as some fixed point number `u` in
+      // [0, 1), thus `r == u * 2^64`. The x coordinate is given by `u * x[i]`.
+      // If x is below `x[i+1]` then certainly we are below the curve. The test
+      // is done using the precomputed `k` table.
+      //   u * x[i] < x[i+1]
+      //   u < x[i+1]/x[i]
+      //   r < 2^64 * x[i+1] / x[i] = k[i]
+      if (r < zk[i]) [[likely]] {
+        auto x = r * zw[i];
+        return static_cast<T>(negative ? -x : x);
+      }
 
-      if (i == 0) {
+      if (i == 0) [[unlikely]] {
         // Marsaglia's polar method for the tail
         double p, q;
         do {
@@ -315,17 +327,19 @@ public:
           p = std::log(1.0 - uniform<double>()) / ziggurat::R;
           q = std::log(1.0 - uniform<double>());
         } while (-2.0 * q < p * p);
-        return static_cast<T>((u < 0) ? p - ziggurat::R : ziggurat::R - p);
+        auto x = ziggurat::R - p;
+        return static_cast<T>(negative ? -x : x);
       }
 
       // `x` is in an area where the box is partially above the curve.
       // Choose a random `y` between y[i] and y[i+1]
-      u = uniform<double>();
-      auto y = zy[i] + u * (zy[i + 1] - zy[i]);
+      auto u = uniform<double>();
+      auto y = std::lerp(zy[i], zy[i + 1], u);
 
       // Accept if the point (x, y) is below the curve.
+      auto x = r * zw[i];
       if (y < std::exp(-0.5 * x * x))
-        return static_cast<T>(x);
+        return static_cast<T>(negative ? -x : x);
     }
   }
 
