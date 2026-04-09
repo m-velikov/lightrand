@@ -5,9 +5,11 @@ project(lightrand LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 find_package(GTest REQUIRED)
 find_package(benchmark REQUIRED)
+find_package(argparse REQUIRED)
 
 add_library(lightrand src/random.cc src/ziggurat-data.cc)
 
@@ -53,3 +55,12 @@ target_link_libraries(simplex-test GTest::gtest_main lightrand)
 
 add_executable(simplex-benchmark src/simplex-benchmark.cc)
 target_link_libraries(simplex-benchmark benchmark::benchmark_main lightrand)
+
+add_executable(gen-bits src/gen-bits.cc)
+target_link_libraries(gen-bits argparse::argparse lightrand)
+
+add_executable(gen-uniform src/gen-uniform.cc)
+target_link_libraries(gen-uniform argparse::argparse lightrand)
+
+add_executable(gen-normal src/gen-normal.cc)
+target_link_libraries(gen-normal argparse::argparse lightrand)

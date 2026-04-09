@@ -18,7 +18,7 @@ class Lightrand(ConanFile):
     channel = "stable"
     exports_sources = "CMakeLists.txt", "src/*", "include/*"
 
-    requires = ("gtest/1.17.0", "benchmark/1.9.4")
+    requires = ("gtest/1.17.0", "benchmark/1.9.4", "argparse/3.2")
 
     def validate(self):
         check_min_cppstd(self, "20")
@@ -44,6 +44,3 @@ class Lightrand(ConanFile):
     def package_info(self):
         self.cpp_info.libs = ["lightrand"]
         self.cpp_info.set_property("cmake_target_name", "lightrand::lightrand")
-
-    # def package_id(self):
-    #     self.info.settings.compiler.libcxx = 'not used'
