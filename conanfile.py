@@ -8,7 +8,7 @@ from pathlib import Path
 class Lightrand(ConanFile):
     name = "lightrand"
     version = "0.1"
-    license = "TBD"
+    license = "MIT"
     author = "Momchil Velikov <momchil.velikov@gmail.com>"
     url = "https://github.com/momchil-velikov"
     description = "A pseudo-random number generator library"
