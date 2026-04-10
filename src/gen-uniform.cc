@@ -18,7 +18,8 @@ int main(int argc, char *argv[]) {
       .scan<'u', uint64_t>();
 
   program.add_argument("-c", "--count")
-      .help("Number of floating-point numbers to generate (default: 10,000,000).")
+      .help(
+          "Number of floating-point numbers to generate (default: 10,000,000).")
       .scan<'u', uint64_t>();
 
   program.add_argument("-d", "--decimal")
@@ -47,11 +48,10 @@ int main(int argc, char *argv[]) {
 
   for (uint64_t i = 0; i < n; ++i) {
     double val = gen.uniform<double>();
-    if (decimal) {
-      std::cout << std::format("{:.17f}\n", val);
-    } else {
+    if (decimal)
+      std::cout << std::format("{:.17g}\n", val);
+    else
       std::cout << std::format("{:a}\n", val);
-    }
   }
 
   return 0;

@@ -49,7 +49,7 @@ int main(int argc, char *argv[]) {
   for (uint64_t i = 0; i < n; ++i) {
     double val = gen.normal<double>();
     if (decimal)
-      std::cout << std::format("{:.17f}\n", val);
+      std::cout << std::format("{:.17g}\n", val);
     else
       std::cout << std::format("{:a}\n", val);
   }
