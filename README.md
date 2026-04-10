@@ -1,6 +1,7 @@
 # lightrand
 
 [![C++20](https://img.shields.io/badge/C++-20-blue.svg)](https://isocpp.org/std/the-standard)
+![GitHub License](https://img.shields.io/github/license/m-velikov/lightrand)
 
 `lightrand` is a modern C++20 library for fast, high-quality pseudo-random number generation. It provides a selection of uniform random bit generators (URBGs) and convenient wrappers for generating numbers from various statistical distributions.
 
@@ -12,8 +13,6 @@
 *   **Easy-to-Use API:** A high-level `generator` class simplifies common random number generation tasks.
 *   **Thread-Safety:** Provides a `thread_local` generator instance for safe use in multi-threaded applications.
 *   **Noise generation (beta):** Provides generators for 1D/2D/3D Perlin noise, and 2D/3D simplex noise.
-
-##
 
 ## Requirements
 
@@ -27,7 +26,7 @@
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/momchil-velikov/lightrand.git
+git clone https://github.com/m-velikov/lightrand.git
 cd lightrand
 
 # 2. Install dependencies with Conan and build Conan package
@@ -38,7 +37,7 @@ conan create .
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/momchil-velikov/lightrand.git
+git clone https://github.com/m-velikov/lightrand.git
 cd lightrand
 
 # 2. Install dependencies with Conan and generate CMake files.
@@ -56,7 +55,7 @@ cmake --build build/Release
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/momchil-velikov/lightrand.git
+git clone https://github.com/m-velikov/lightrand.git
 cd lightrand
 
 # 2. Create the build directory
@@ -67,6 +66,17 @@ cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release
 
 # 4. Build the library, tests, and benchmarks
 ninja
+```
+
+### A note about building on Microsoft Windows
+
+Depending on the C++ Standard setting in Conan profile and the specific verson
+of MSVC, the build may fail. One of the symptoms is linker error messages
+about unresolved symbols from MSVC STL. In this case you may need to rebuild
+dependencies from source. Use the following command:
+
+```bash
+conan install . --build=gtest/1.17.0  --build=benchmark/1.9.4 --build=argparse/3.2
 ```
 
 ## Usage
@@ -190,6 +200,8 @@ The results can be reproduced by running `random-benchmark`.
 ![Apple M4 Max](images/m4-max.svg)
 
 ### Microsoft Windows / AMD Ryzen 7 9800X3D (using MSVC STL)
+![AMD Ryzen 7 9800X3D](images/ryzen-7-9800X3D.svg)
+
 
 TBD
 
