@@ -278,7 +278,8 @@ public:
    * @return A uniformly distributed random floating-point number.
    */
   template <std::floating_point T> T uniform(T lo, T hi = static_cast<T>(1.0)) {
-    return std::lerp(lo, hi, uniform<T>());
+    T result = std::lerp(lo, hi, uniform<T>());
+    return result == hi ? std::nextafter(hi, lo) : result;
   }
 
   /**
