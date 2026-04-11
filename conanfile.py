@@ -10,8 +10,8 @@ class Lightrand(ConanFile):
     version = "0.1"
     license = "MIT"
     author = "Momchil Velikov <momchil.velikov@gmail.com>"
-    url = "https://github.com/momchil-velikov"
-    description = "A pseudo-random number generator library"
+    url = "https://github.com/m-velikov/lightrand"
+    description = "A modern C++20 library for fast, high-quality pseudo-random number generation"
 
     settings = "os", "compiler", "build_type", "arch"
     user = "chill"
