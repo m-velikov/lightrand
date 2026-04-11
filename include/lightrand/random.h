@@ -159,6 +159,16 @@ using engine = xoshiro256starstar;
  */
 extern xoshiro256starstar global_urbg;
 
+/**
+ * @brief Thread-local uniform random bit generator.
+ *
+ * This is a thread-local instance of the xoshiro256** random number generator.
+ * Unlike `global_urbg`, it is safe to use concurrently across multiple threads
+ * without requiring synchronization (such as mutexes),
+ *
+ * @see xoshiro256starstar
+ * @see global_urbg
+ */
 extern thread_local xoshiro256starstar thread_urbg;
 
 namespace ziggurat {
@@ -302,13 +312,14 @@ public:
       auto i = static_cast<unsigned>(r & (ziggurat::N - 1));
 
       // Bit 8 selects the sign of the result.
-      // auto sign = (r & ziggurat::N) ? T{-1.0} : T{1.0};
       bool negative = (r & ziggurat::N) != 0;
 
       // Bits 63-11 are interpreted as the mantissa of a `double` in the range
       // [0, 1).
       auto u = static_cast<double>(r >> 11) / 0x1.0p53;
 
+      // If `x` is within the extent of the box above, then the sample point is
+      // below the curve.
       auto x = u * zx[i];
       if (x < zx[i + 1]) [[likely]]
         return static_cast<T>(negative ? -x : x);
