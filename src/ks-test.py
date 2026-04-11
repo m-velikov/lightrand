@@ -12,7 +12,7 @@ args = parser.parse_args()
 
 data = np.loadtxt(sys.stdin)
 # K-S test against the specified distribution
-statistic, p_value = stats.kstest(data, args.dist) 
+statistic, p_value = stats.kstest(data, args.dist)
 print(f"P-value: {p_value}")
 if p_value < 0.05:
     print('FAIL')
