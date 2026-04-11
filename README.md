@@ -17,7 +17,7 @@
 ## Requirements
 
 *   A C++20 compatible compiler (e.g., GCC 10+, Clang 12+, MSVC 19.29+).
-*   CMake (version 4.0 or newer).
+*   CMake (version 3.28 or newer).
 *   Ninja
 *   (optional) Conan package manager.
 
