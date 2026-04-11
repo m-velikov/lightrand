@@ -40,28 +40,28 @@ install(EXPORT lightrand-targets
 add_executable(gen-ziggurat-table src/gen-ziggurat-table.cc)
 
 add_executable(random-test src/random-test.cc)
-target_link_libraries(random-test GTest::gtest_main lightrand)
+target_link_libraries(random-test PRIVATE GTest::gtest_main lightrand)
 
 add_executable(random-benchmark src/random-benchmark.cc)
-target_link_libraries(random-benchmark benchmark::benchmark_main lightrand)
+target_link_libraries(random-benchmark PRIVATE benchmark::benchmark_main lightrand)
 
 add_executable(perlin-test src/perlin-test.cc)
-target_link_libraries(perlin-test GTest::gtest_main lightrand)
+target_link_libraries(perlin-test PRIVATE GTest::gtest_main lightrand)
 
 add_executable(perlin-benchmark src/perlin-benchmark.cc)
-target_link_libraries(perlin-benchmark benchmark::benchmark_main lightrand)
+target_link_libraries(perlin-benchmark PRIVATE benchmark::benchmark_main lightrand)
 
 add_executable(simplex-test src/simplex-test.cc)
-target_link_libraries(simplex-test GTest::gtest_main lightrand)
+target_link_libraries(simplex-test PRIVATE GTest::gtest_main lightrand)
 
 add_executable(simplex-benchmark src/simplex-benchmark.cc)
-target_link_libraries(simplex-benchmark benchmark::benchmark_main lightrand)
+target_link_libraries(simplex-benchmark PRIVATE benchmark::benchmark_main lightrand)
 
 add_executable(gen-bits src/gen-bits.cc)
-target_link_libraries(gen-bits argparse::argparse lightrand)
+target_link_libraries(gen-bits PRIVATE argparse::argparse lightrand)
 
 add_executable(gen-uniform src/gen-uniform.cc)
-target_link_libraries(gen-uniform argparse::argparse lightrand)
+target_link_libraries(gen-uniform PRIVATE argparse::argparse lightrand)
 
 add_executable(gen-normal src/gen-normal.cc)
-target_link_libraries(gen-normal argparse::argparse lightrand)
+target_link_libraries(gen-normal PRIVATE argparse::argparse lightrand)
