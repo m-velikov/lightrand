@@ -18,7 +18,10 @@ class Lightrand(ConanFile):
     channel = "stable"
     exports_sources = "CMakeLists.txt", "src/*", "include/*"
 
-    requires = ("gtest/1.17.0", "benchmark/1.9.4", "argparse/3.2")
+    def build_requirements(self):
+        self.test_requires("gtest/1.17.0")
+        self.test_requires("benchmark/1.9.4")
+        self.test_requires("argparse/3.2")
 
     def validate(self):
         check_min_cppstd(self, "20")
