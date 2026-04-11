@@ -1,0 +1,20 @@
+{
+  "name": "lightrand",
+  "version": "0.1",
+  "description": "A modern C++20 library for fast, high-quality pseudo-random number generation",
+  "homepage": "https://github.com/m-velikov/lightrand",
+  "license": "MIT",
+  "dependencies": [
+    "gtest",
+    "benchmark",
+    "argparse",
+    {
+      "name": "vcpkg-cmake",
+      "host": true
+    },
+    {
+      "name": "vcpkg-cmake-config",
+      "host": true
+    }
+  ]
+}

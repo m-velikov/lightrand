@@ -1,0 +1,4 @@
+lightrand provides CMake targets:
+
+find_package(lightrand CONFIG REQUIRED)
+target_link_libraries(main PRIVATE lightrand::lightrand)
