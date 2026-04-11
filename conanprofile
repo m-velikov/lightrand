@@ -1,0 +1,11 @@
+
+include(default)
+
+[settings]
+lightrand/*:build_type=Release
+gtest/*:build_type=Release
+benchmark/*:build_type=Release
+argparse/*:build_type=Release
+
+[conf]
+tools.cmake.cmaketoolchain:generator=Ninja

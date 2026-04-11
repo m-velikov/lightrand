@@ -17,23 +17,24 @@
 ## Requirements
 
 *   A C++20 compatible compiler (e.g., GCC 10+, Clang 12+, MSVC 19.29+).
-*   CMake (version 3.15 or newer).
+*   CMake (version 4.0 or newer).
+*   Ninja
 *   (optional) Conan package manager.
 
 ## Building
 
-### Building a Conan package
+### Building a release package with Conan
 
 ```bash
 # 1. Clone the repository
 git clone https://github.com/m-velikov/lightrand.git
 cd lightrand
 
-# 2. Install dependencies with Conan and build Conan package
-conan create .
+# 2. Install dependencies and build Conan package
+conan create . -pr conanprofile --build=missing
 ```
 
-### Building with Conan
+### Building for local development with Conan
 
 ```bash
 # 1. Clone the repository
@@ -42,13 +43,13 @@ cd lightrand
 
 # 2. Install dependencies with Conan and generate CMake files.
 # This creates a 'build' directory with the necessary toolchain files.
-conan install .
+conan install . -pr conanprofile --build=missing -s "lightrand/*:build_type=Debug"
 
 # 3. Configure the project with CMake
-cmake --preset conan-release
+cmake --preset conan-debug
 
 # 4. Build the library, tests, and benchmarks
-cmake --build build/Release
+cmake --build build/Debug
 ```
 
 ### Building with CMake
@@ -66,17 +67,6 @@ cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release
 
 # 4. Build the library, tests, and benchmarks
 ninja
-```
-
-### A note about building on Microsoft Windows
-
-Depending on the C++ Standard setting in Conan profile and the specific verson
-of MSVC, the build may fail. One of the symptoms is linker error messages
-about unresolved symbols from MSVC STL. In this case you may need to rebuild
-dependencies from source. Use the following command:
-
-```bash
-conan install . --build=gtest/1.17.0  --build=benchmark/1.9.4 --build=argparse/3.2
 ```
 
 ## Usage
