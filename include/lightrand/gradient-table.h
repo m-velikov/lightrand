@@ -19,8 +19,8 @@ struct vec2 {
   }
   void normalize() {
     auto d = dot(*this, *this);
-    x /= std::sqrtf(d);
-    y /= std::sqrtf(d);
+    x /= std::sqrt(d);
+    y /= std::sqrt(d);
   }
 
   float x, y;
@@ -32,9 +32,9 @@ struct vec3 {
   }
   void normalize() {
     auto d = dot(*this, *this);
-    x /= std::sqrtf(d);
-    y /= std::sqrtf(d);
-    z /= std::sqrtf(d);
+    x /= std::sqrt(d);
+    y /= std::sqrt(d);
+    z /= std::sqrt(d);
   }
 
   float x, y, z;
