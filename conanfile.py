@@ -11,11 +11,11 @@ class Lightrand(ConanFile):
     license = "MIT"
     author = "Momchil Velikov <momchil.velikov@gmail.com>"
     url = "https://github.com/m-velikov/lightrand"
-    description = "A modern C++20 library for fast, high-quality pseudo-random number generation"
+    description = (
+        "A modern C++20 library for fast, high-quality pseudo-random number generation"
+    )
 
     settings = "os", "compiler", "build_type", "arch"
-    user = "chill"
-    channel = "stable"
     exports_sources = "CMakeLists.txt", "src/*", "include/*"
 
     def build_requirements(self):
