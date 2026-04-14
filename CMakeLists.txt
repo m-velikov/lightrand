@@ -12,7 +12,7 @@ find_package(GTest REQUIRED)
 find_package(benchmark REQUIRED)
 find_package(argparse REQUIRED)
 
-add_library(lightrand src/random.cc src/ziggurat-data.cc)
+add_library(lightrand STATIC src/random.cc src/ziggurat-data.cc)
 
 target_include_directories(lightrand PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -34,6 +34,14 @@ install(DIRECTORY include/
 install(EXPORT lightrand-targets
     FILE lightrand-targets.cmake
     NAMESPACE lightrand::
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/lightrand
+)
+
+file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/lightrand-config.cmake"
+    "include(\"\${CMAKE_CURRENT_LIST_DIR}/lightrand-targets.cmake\")\n"
+)
+
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/lightrand-config.cmake"
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/lightrand
 )
 
