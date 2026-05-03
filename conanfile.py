@@ -20,7 +20,7 @@ class Lightrand(ConanFile):
 
     def build_requirements(self):
         self.test_requires("gtest/1.17.0")
-        self.test_requires("benchmark/1.9.4")
+        self.test_requires("benchmark/1.9.5")
         self.test_requires("argparse/3.2")
 
     def validate(self):
