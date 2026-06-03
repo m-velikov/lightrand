@@ -23,9 +23,6 @@ class Lightrand(ConanFile):
         self.test_requires("benchmark/1.9.5")
         self.test_requires("argparse/3.2")
 
-    def validate(self):
-        check_min_cppstd(self, "20")
-
     def layout(self):
         cmake_layout(self, src_folder=".", build_folder="build")
 
