@@ -190,16 +190,9 @@ public:
   /**
    * @brief Constructs a random number generator.
    *
-   * @param s An optional seed value used to initialize the generator. If
-   * std::nullopt, the engine is not re-seeded.
    * @param eng The underlying uniform random bit generator (URBG) engine.
    */
-  explicit generator(std::optional<std::uint64_t> s = std::nullopt,
-                     engine &eng = thread_urbg)
-      : urbg_(eng) {
-    if (s)
-      seed(*s);
-  }
+  explicit generator(engine &eng = thread_urbg) : urbg_(eng) {}
 
   /**
    * @brief Seeds the underlying random number generator.

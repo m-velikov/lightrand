@@ -40,7 +40,7 @@ BENCHMARK(BM_StdUniformInt_MT);
 
 void BM_LightrandUniformInt(benchmark::State &state) {
   lightrand::xoshiro256starstar eng(12345);
-  lightrand::generator gen(12345, eng);
+  lightrand::generator gen(eng);
   for (auto _ [[maybe_unused]] : state)
     benchmark::DoNotOptimize(gen.uniform<int>(10, 1000));
 }
@@ -66,7 +66,7 @@ BENCHMARK(BM_StdUniformReal_MT);
 
 void BM_LightrandUniformReal(benchmark::State &state) {
   lightrand::xoshiro256starstar eng(12345);
-  lightrand::generator gen(12345, eng);
+  lightrand::generator gen(eng);
   for (auto _ [[maybe_unused]] : state)
     benchmark::DoNotOptimize(gen.uniform<double>());
 }
@@ -92,7 +92,7 @@ BENCHMARK(BM_StdNormal_MT);
 
 void BM_LightrandNormal(benchmark::State &state) {
   lightrand::xoshiro256starstar eng(12345);
-  lightrand::generator gen(12345, eng);
+  lightrand::generator gen(eng);
   for (auto _ [[maybe_unused]] : state)
     benchmark::DoNotOptimize(gen.normal<double>());
 }

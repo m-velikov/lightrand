@@ -10,7 +10,7 @@ constexpr float EPSILON = 1e-6f;
 // --- 2D Simplex Noise Tests ---
 
 TEST(Simplex2DTest, OriginIsZero) {
-  lightrand::generator gen(42);
+  lightrand::generator gen;
   lightrand::simplex2d<> noise(gen);
 
   // Simplex distance vectors yield 0.0 exactly at the unskewed origin
@@ -18,10 +18,12 @@ TEST(Simplex2DTest, OriginIsZero) {
 }
 
 TEST(Simplex2DTest, Determinism) {
-  lightrand::generator gen1(999);
+  lightrand::engine eng1(999);
+  lightrand::generator gen1(eng1);
   lightrand::simplex2d<> noise1(gen1);
 
-  lightrand::generator gen2(999);
+  lightrand::engine eng2(999);
+  lightrand::generator gen2(eng2);
   lightrand::simplex2d<> noise2(gen2);
 
   EXPECT_FLOAT_EQ(noise1.eval(1.23f, 4.56f), noise2.eval(1.23f, 4.56f));
@@ -29,7 +31,7 @@ TEST(Simplex2DTest, Determinism) {
 }
 
 TEST(Simplex2DTest, Bounds) {
-  lightrand::generator gen(12345);
+  lightrand::generator gen;
   lightrand::simplex2d<> noise(gen);
 
   // Verify that outputs are generally within the [-1.0, 1.0] range
@@ -47,17 +49,19 @@ TEST(Simplex2DTest, Bounds) {
 // --- 3D Simplex Noise Tests ---
 
 TEST(Simplex3DTest, OriginIsZero) {
-  lightrand::generator gen(42);
+  lightrand::generator gen;
   lightrand::simplex3d<> noise(gen);
 
   EXPECT_NEAR(noise.eval(0.0f, 0.0f, 0.0f), 0.0f, EPSILON);
 }
 
 TEST(Simplex3DTest, Determinism) {
-  lightrand::generator gen1(999);
+  lightrand::engine eng1(999);
+  lightrand::generator gen1(eng1);
   lightrand::simplex3d<> noise1(gen1);
 
-  lightrand::generator gen2(999);
+  lightrand::engine eng2(999);
+  lightrand::generator gen2(eng2);
   lightrand::simplex3d<> noise2(gen2);
 
   EXPECT_FLOAT_EQ(noise1.eval(1.23f, 4.56f, 7.89f),
@@ -67,7 +71,7 @@ TEST(Simplex3DTest, Determinism) {
 }
 
 TEST(Simplex3DTest, Bounds) {
-  lightrand::generator gen(12345);
+  lightrand::generator gen;
   lightrand::simplex3d<> noise(gen);
 
   for (int i = -10; i < 10; ++i) {

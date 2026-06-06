@@ -10,7 +10,7 @@ constexpr float EPSILON = 1e-6f;
 // --- 1D Perlin Noise Tests ---
 
 TEST(Perlin1DTest, ZeroAtIntegerCoordinates) {
-  lightrand::generator gen(42);
+  lightrand::generator gen;
   lightrand::perlin1d<> noise(gen);
 
   EXPECT_NEAR(noise.eval(0.0f), 0.0f, EPSILON);
@@ -20,7 +20,7 @@ TEST(Perlin1DTest, ZeroAtIntegerCoordinates) {
 }
 
 TEST(Perlin1DTest, WrapAroundAndPeriodicity) {
-  lightrand::generator gen(12345);
+  lightrand::generator gen;
   lightrand::perlin1d<256> noise(gen);
 
   // Verify that the noise repeats every TABLE_SIZE (256) units.
@@ -30,10 +30,12 @@ TEST(Perlin1DTest, WrapAroundAndPeriodicity) {
 }
 
 TEST(Perlin1DTest, Determinism) {
-  lightrand::generator gen1(999);
+  lightrand::engine eng1(999);
+  lightrand::generator gen1(eng1);
   lightrand::perlin1d<> noise1(gen1);
 
-  lightrand::generator gen2(999);
+  lightrand::engine eng2(999);
+  lightrand::generator gen2(eng2);
   lightrand::perlin1d<> noise2(gen2);
 
   EXPECT_FLOAT_EQ(noise1.eval(1.23f), noise2.eval(1.23f));
@@ -43,7 +45,7 @@ TEST(Perlin1DTest, Determinism) {
 // --- 2D Perlin Noise Tests ---
 
 TEST(Perlin2DTest, ZeroAtIntegerCoordinates) {
-  lightrand::generator gen(42);
+  lightrand::generator gen;
   lightrand::perlin2d<> noise(gen);
 
   EXPECT_NEAR(noise.eval(0.0f, 0.0f), 0.0f, EPSILON);
@@ -52,7 +54,7 @@ TEST(Perlin2DTest, ZeroAtIntegerCoordinates) {
 }
 
 TEST(Perlin2DTest, WrapAroundAndPeriodicity) {
-  lightrand::generator gen(12345);
+  lightrand::generator gen;
   lightrand::perlin2d<256> noise(gen);
 
   EXPECT_FLOAT_EQ(noise.eval(0.5f, 0.25f), noise.eval(256.5f, 256.25f));
@@ -60,10 +62,12 @@ TEST(Perlin2DTest, WrapAroundAndPeriodicity) {
 }
 
 TEST(Perlin2DTest, Determinism) {
-  lightrand::generator gen1(999);
+  lightrand::engine eng1(999);
+  lightrand::generator gen1(eng1);
   lightrand::perlin2d<> noise1(gen1);
 
-  lightrand::generator gen2(999);
+  lightrand::engine eng2(999);
+  lightrand::generator gen2(eng2);
   lightrand::perlin2d<> noise2(gen2);
 
   EXPECT_FLOAT_EQ(noise1.eval(1.23f, 4.56f), noise2.eval(1.23f, 4.56f));
@@ -73,7 +77,7 @@ TEST(Perlin2DTest, Determinism) {
 // --- 3D Perlin Noise Tests ---
 
 TEST(Perlin3DTest, ZeroAtIntegerCoordinates) {
-  lightrand::generator gen(42);
+  lightrand::generator gen;
   lightrand::perlin3d<> noise(gen);
 
   EXPECT_NEAR(noise.eval(0.0f, 0.0f, 0.0f), 0.0f, EPSILON);
@@ -82,7 +86,7 @@ TEST(Perlin3DTest, ZeroAtIntegerCoordinates) {
 }
 
 TEST(Perlin3DTest, WrapAroundAndPeriodicity) {
-  lightrand::generator gen(12345);
+  lightrand::generator gen;
   lightrand::perlin3d<256> noise(gen);
 
   EXPECT_FLOAT_EQ(noise.eval(0.5f, 0.25f, 0.125f),
@@ -92,10 +96,12 @@ TEST(Perlin3DTest, WrapAroundAndPeriodicity) {
 }
 
 TEST(Perlin3DTest, Determinism) {
-  lightrand::generator gen1(999);
+  lightrand::engine eng1(999);
+  lightrand::generator gen1(eng1);
   lightrand::perlin3d<> noise1(gen1);
 
-  lightrand::generator gen2(999);
+  lightrand::engine eng2(999);
+  lightrand::generator gen2(eng2);
   lightrand::perlin3d<> noise2(gen2);
 
   EXPECT_FLOAT_EQ(noise1.eval(1.23f, 4.56f, 7.89f),

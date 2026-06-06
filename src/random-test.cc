@@ -41,18 +41,15 @@ TEST(Xoshiro256StarStarTest, Determinism) {
 // --- Generator & Distribution Tests ---
 
 TEST(GeneratorTest, Determinism) {
-  lightrand::generator gen1(12345, lightrand::thread_urbg);
+  lightrand::thread_urbg.seed(12345);
+  lightrand::generator gen1(lightrand::thread_urbg);
   lightrand::engine eng1(12345);
-  lightrand::generator gen2({}, eng1);
-  lightrand::engine eng2;
-  lightrand::generator gen3(12345, eng2);
+  lightrand::generator gen2(eng1);
 
   for (int i = 0; i < 100; ++i) {
     auto v1 = gen1.uniform<int>(10, 20);
     auto v2 = gen2.uniform<int>(10, 20);
-    auto v3 = gen3.uniform<int>(10, 20);
     EXPECT_EQ(v1, v2);
-    EXPECT_EQ(v1, v3);
   }
 }
 
@@ -67,7 +64,7 @@ TEST(GeneratorTest, DefaultConstructor) {
 }
 
 TEST(GeneratorTest, UniformIntLimits) {
-  lightrand::generator gen(12345);
+  lightrand::generator gen;
   int min_val = 10;
   int max_val = 20;
 
@@ -79,7 +76,7 @@ TEST(GeneratorTest, UniformIntLimits) {
 }
 
 TEST(GeneratorTest, UniformIntDefaultHi) {
-  lightrand::generator gen(12345);
+  lightrand::generator gen;
   int min_val = std::numeric_limits<int>::max() - 100;
 
   for (int i = 0; i < 1000; ++i) {
@@ -90,7 +87,7 @@ TEST(GeneratorTest, UniformIntDefaultHi) {
 }
 
 TEST(GeneratorTest, UniformFloatDefaultRange) {
-  lightrand::generator gen(12345);
+  lightrand::generator gen;
 
   for (int i = 0; i < 1000; ++i) {
     auto val_d = gen.uniform<double>();
@@ -104,7 +101,7 @@ TEST(GeneratorTest, UniformFloatDefaultRange) {
 }
 
 TEST(GeneratorTest, UniformFloatCustomRange) {
-  lightrand::generator gen(12345);
+  lightrand::generator gen;
   double min_val = 1.5;
   double max_val = 5.5;
 
@@ -116,7 +113,7 @@ TEST(GeneratorTest, UniformFloatCustomRange) {
 }
 
 TEST(GeneratorTest, UniformFloatDefaultHi) {
-  lightrand::generator gen(12345);
+  lightrand::generator gen;
   double min_val = 0.5;
 
   for (int i = 0; i < 1000; ++i) {
@@ -127,7 +124,7 @@ TEST(GeneratorTest, UniformFloatDefaultHi) {
 }
 
 TEST(GeneratorTest, NormalDistributionStats) {
-  lightrand::generator gen(12345);
+  lightrand::generator gen;
 
   double sum = 0.0;
   double sq_sum = 0.0;
@@ -151,7 +148,7 @@ TEST(GeneratorTest, NormalDistributionStats) {
 }
 
 TEST(GeneratorTest, NormalDefaultStddev) {
-  lightrand::generator gen(12345);
+  lightrand::generator gen;
 
   double sum = 0.0;
   double sq_sum = 0.0;

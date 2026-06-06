@@ -40,12 +40,11 @@ int main(int argc, char *argv[]) {
       std::random_device rd;
       seed = (static_cast<uint64_t>(rd()) << 32) | rd();
     }
-
     uint64_t n = program.present<uint64_t>("--count").value_or(10'000'000);
-    lightrand::generator gen(seed);
-
     bool decimal = program.get<bool>("--decimal");
 
+    lightrand::generator gen;
+    gen.seed(seed);
     for (uint64_t i = 0; i < n; ++i) {
       auto val = gen.uniform<double>();
       if (decimal)
