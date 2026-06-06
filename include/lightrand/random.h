@@ -332,7 +332,7 @@ public:
           p = std::log(1.0 - uniform<double>()) / ziggurat::R;
           q = std::log(1.0 - uniform<double>());
         } while (-2.0 * q < p * p);
-        auto x = ziggurat::R - p;
+        x = ziggurat::R - p;
         return static_cast<T>(negative ? -x : x);
       }
 
