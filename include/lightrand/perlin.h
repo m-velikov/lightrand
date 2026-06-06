@@ -41,7 +41,7 @@ public:
    * @param gen The random number generator used to create the gradients and
    *            permutation table.
    */
-  perlin1d(generator &gen) : grad(gen) {}
+  explicit perlin1d(generator &gen) : grad(gen) {}
 
   /**
    * @brief Evaluates the 1D Perlin noise at a given coordinate.
@@ -94,7 +94,7 @@ public:
    * @param gen The random number generator used to create the gradients and
    *            permutation table.
    */
-  perlin2d(generator &gen) : ctx(gen) {}
+  explicit perlin2d(generator &gen) : ctx(gen) {}
 
   /**
    * @brief Evaluates the 2D Perlin noise at given coordinates.
@@ -172,7 +172,7 @@ public:
    * @param gen The random number generator used to create the gradients and
    *            permutation table.
    */
-  perlin3d(generator &gen) : ctx(gen) {}
+  explicit perlin3d(generator &gen) : ctx(gen) {}
 
   /**
    * @brief Evaluates the 3D Perlin noise at given coordinates.

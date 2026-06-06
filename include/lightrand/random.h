@@ -195,7 +195,7 @@ public:
    * @param s An optional seed value used to initialize the generator.
    * @param eng The underlying uniform random bit generator (URBG) engine.
    */
-  generator(std::uint64_t s = 0xc0ffeef00d, engine &eng = global_urbg)
+  explicit generator(std::uint64_t s = 0xc0ffeef00d, engine &eng = global_urbg)
       : urbg_(eng) {
     seed(s);
   }

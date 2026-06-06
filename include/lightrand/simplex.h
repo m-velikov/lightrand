@@ -34,7 +34,7 @@ public:
    * @param gen The random number generator used to create the gradients and
    *            permutation table.
    */
-  simplex2d(generator &gen) : grad(gen) {}
+  explicit simplex2d(generator &gen) : grad(gen) {}
 
   /**
    * @brief Evaluates the 2D Simplex noise at given coordinates.
@@ -147,7 +147,7 @@ public:
    * @param gen The random number generator used to create the gradients and
    *            permutation table.
    */
-  simplex3d(generator &gen) : ctx(gen) {}
+  explicit simplex3d(generator &gen) : ctx(gen) {}
 
   /**
    * @brief Evaluates the 3D Simplex noise at given coordinates.

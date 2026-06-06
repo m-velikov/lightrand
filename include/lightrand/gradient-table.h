@@ -55,7 +55,7 @@ private:
   std::array<std::uint32_t, TABLE_SIZE * 2ull> perm;
 
 public:
-  gradient_table(generator &gen) {
+  explicit gradient_table(generator &gen) {
     init_gradients(gen);
 
     std::iota(perm.begin(), perm.begin() + TABLE_SIZE, 0);
