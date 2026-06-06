@@ -89,14 +89,16 @@ private:
     } else if constexpr (std::is_same_v<GradientType, vec2>) {
       for (auto &g : grad) {
         do {
-          g = {gen.normal<float>(), gen.normal<float>()};
+          g = {.x = gen.normal<float>(), .y = gen.normal<float>()};
         } while (g.x == 0.0f && g.y == 0.0f);
         g.normalize();
       }
     } else if constexpr (std::is_same_v<GradientType, vec3>) {
       for (auto &g : grad) {
         do {
-          g = {gen.normal<float>(), gen.normal<float>(), gen.normal<float>()};
+          g = {.x = gen.normal<float>(),
+               .y = gen.normal<float>(),
+               .z = gen.normal<float>()};
         } while (g.x == 0.0f && g.y == 0.0f && g.z == 0.0f);
         g.normalize();
       }

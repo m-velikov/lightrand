@@ -1,7 +1,6 @@
 #include "gradient-table.h"
 #include "random.h"
 
-#include <algorithm>
 #include <bit>
 #include <cmath>
 #include <cstdint>
@@ -132,10 +131,10 @@ public:
     float dy0 = ty;
     float dy1 = ty - 1.0f;
 
-    detail::vec2 p00 = {dx0, dy0};
-    detail::vec2 p10 = {dx1, dy0};
-    detail::vec2 p01 = {dx0, dy1};
-    detail::vec2 p11 = {dx1, dy1};
+    detail::vec2 p00 = {.x = dx0, .y = dy0};
+    detail::vec2 p10 = {.x = dx1, .y = dy0};
+    detail::vec2 p01 = {.x = dx0, .y = dy1};
+    detail::vec2 p11 = {.x = dx1, .y = dy1};
 
     // Compute the dot product between the gradient and distance vector, then
     // interpolate along x
@@ -222,15 +221,15 @@ public:
     float dz0 = tz;
     float dz1 = tz - 1.0f;
 
-    detail::vec3 p000 = {dx0, dy0, dz0};
-    detail::vec3 p100 = {dx1, dy0, dz0};
-    detail::vec3 p010 = {dx0, dy1, dz0};
-    detail::vec3 p110 = {dx1, dy1, dz0};
+    detail::vec3 p000 = {.x = dx0, .y = dy0, .z = dz0};
+    detail::vec3 p100 = {.x = dx1, .y = dy0, .z = dz0};
+    detail::vec3 p010 = {.x = dx0, .y = dy1, .z = dz0};
+    detail::vec3 p110 = {.x = dx1, .y = dy1, .z = dz0};
 
-    detail::vec3 p001 = {dx0, dy0, dz1};
-    detail::vec3 p101 = {dx1, dy0, dz1};
-    detail::vec3 p011 = {dx0, dy1, dz1};
-    detail::vec3 p111 = {dx1, dy1, dz1};
+    detail::vec3 p001 = {.x = dx0, .y = dy0, .z = dz1};
+    detail::vec3 p101 = {.x = dx1, .y = dy0, .z = dz1};
+    detail::vec3 p011 = {.x = dx0, .y = dy1, .z = dz1};
+    detail::vec3 p111 = {.x = dx1, .y = dy1, .z = dz1};
 
     // Compute the dot product between the gradient and distance vector, then
     // interpolate along x

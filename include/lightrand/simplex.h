@@ -97,7 +97,7 @@ public:
       n0 = 0.0f;
     } else {
       t0 *= t0;
-      detail::vec2 p0 = {dx0, dy0};
+      detail::vec2 p0 = {.x = dx0, .y = dy0};
       n0 = t0 * t0 * detail::vec2::dot(grad(hi0, hj0), p0);
     }
 
@@ -106,7 +106,7 @@ public:
       n1 = 0.0f;
     } else {
       t1 *= t1;
-      detail::vec2 p1 = {dx1, dy1};
+      detail::vec2 p1 = {.x = dx1, .y = dy1};
       n1 = t1 * t1 * detail::vec2::dot(grad(hi1, hj1), p1);
     }
 
@@ -115,7 +115,7 @@ public:
       n2 = 0.0f;
     } else {
       t2 *= t2;
-      detail::vec2 p2 = {dx2, dy2};
+      detail::vec2 p2 = {.x = dx2, .y = dy2};
       n2 = t2 * t2 * detail::vec2::dot(grad(hi2, hj2), p2);
     }
 
@@ -260,7 +260,7 @@ public:
       n0 = 0.0f;
     } else {
       t0 *= t0;
-      detail::vec3 p0 = {dx0, dy0, dz0};
+      detail::vec3 p0 = {.x = dx0, .y = dy0, .z = dz0};
       n0 = t0 * t0 * detail::vec3::dot(ctx(hi, hj, hk), p0);
     }
 
@@ -269,7 +269,7 @@ public:
       n1 = 0.0f;
     } else {
       t1 *= t1;
-      detail::vec3 p1 = {dx1, dy1, dz1};
+      detail::vec3 p1 = {.x = dx1, .y = dy1, .z = dz1};
       n1 = t1 * t1 *
            detail::vec3::dot(ctx(detail::wrap_grid_coord(i + i1, size_mask),
                                  detail::wrap_grid_coord(j + j1, size_mask),
@@ -282,7 +282,7 @@ public:
       n2 = 0.0f;
     } else {
       t2 *= t2;
-      detail::vec3 p2 = {dx2, dy2, dz2};
+      detail::vec3 p2 = {.x = dx2, .y = dy2, .z = dz2};
       n2 = t2 * t2 *
            detail::vec3::dot(ctx(detail::wrap_grid_coord(i + i2, size_mask),
                                  detail::wrap_grid_coord(j + j2, size_mask),
@@ -295,7 +295,7 @@ public:
       n3 = 0.0f;
     } else {
       t3 *= t3;
-      detail::vec3 p3 = {dx3, dy3, dz3};
+      detail::vec3 p3 = {.x = dx3, .y = dy3, .z = dz3};
       n3 = t3 * t3 *
            detail::vec3::dot(ctx(detail::wrap_grid_coord(i + 1.0f, size_mask),
                                  detail::wrap_grid_coord(j + 1.0f, size_mask),
