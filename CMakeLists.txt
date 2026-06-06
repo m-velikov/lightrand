@@ -9,6 +9,8 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_SCAN_FOR_MODULES OFF)
 
 find_package(GTest REQUIRED)
+include(GoogleTest)
+enable_testing()
 find_package(benchmark REQUIRED)
 find_package(argparse REQUIRED)
 
@@ -49,18 +51,21 @@ add_executable(gen-ziggurat-table src/gen-ziggurat-table.cc)
 
 add_executable(random-test src/random-test.cc)
 target_link_libraries(random-test PRIVATE GTest::gtest_main lightrand)
+gtest_discover_tests(random-test)
 
 add_executable(random-benchmark src/random-benchmark.cc)
 target_link_libraries(random-benchmark PRIVATE benchmark::benchmark_main lightrand)
 
 add_executable(perlin-test src/perlin-test.cc)
 target_link_libraries(perlin-test PRIVATE GTest::gtest_main lightrand)
+gtest_discover_tests(perlin-test)
 
 add_executable(perlin-benchmark src/perlin-benchmark.cc)
 target_link_libraries(perlin-benchmark PRIVATE benchmark::benchmark_main lightrand)
 
 add_executable(simplex-test src/simplex-test.cc)
 target_link_libraries(simplex-test PRIVATE GTest::gtest_main lightrand)
+gtest_discover_tests(simplex-test)
 
 add_executable(simplex-benchmark src/simplex-benchmark.cc)
 target_link_libraries(simplex-benchmark PRIVATE benchmark::benchmark_main lightrand)
