@@ -3,6 +3,7 @@
 Checks: >
   -*,
   bugprone-*,
+  clang-analyzer-*,
   performance-*,
   modernize-*,
   -modernize-use-trailing-return-type,
@@ -18,9 +19,6 @@ Checks: >
   misc-*,
   -misc-const-correctness,
   -misc-non-private-member-variables-in-classes
-
-# On a new project, enforce it: treat all enabled warnings as errors
-# WarningsAsErrors: "*"
 
 # Automatically apply suggested fixes where safe
 HeaderFilterRegex: ".*"
