@@ -33,8 +33,10 @@ TEST(Simplex2DTest, Bounds) {
   lightrand::simplex2d<> noise(gen);
 
   // Verify that outputs are generally within the [-1.0, 1.0] range
-  for (float x = -10.0f; x < 10.0f; x += 0.5f) {
-    for (float y = -10.0f; y < 10.0f; y += 0.5f) {
+  for (int i = -20; i < 20; ++i) {
+    float x = static_cast<float>(i) * 0.5f;
+    for (int j = -20; j < 20; ++j) {
+      float y = static_cast<float>(j) * 0.5f;
       float val = noise.eval(x, y);
       EXPECT_GE(val, -1.1f);
       EXPECT_LE(val, 1.1f);
@@ -68,9 +70,12 @@ TEST(Simplex3DTest, Bounds) {
   lightrand::generator gen(12345);
   lightrand::simplex3d<> noise(gen);
 
-  for (float x = -5.0f; x < 5.0f; x += 0.5f) {
-    for (float y = -5.0f; y < 5.0f; y += 0.5f) {
-      for (float z = -5.0f; z < 5.0f; z += 0.5f) {
+  for (int i = -10; i < 10; ++i) {
+    float x = static_cast<float>(i) * 0.5f;
+    for (int j = -10; j < 10; ++j) {
+      float y = static_cast<float>(j) * 0.5f;
+      for (int k = -10; k < 10; ++k) {
+        float z = static_cast<float>(k) * 0.5f;
         float val = noise.eval(x, y, z);
         EXPECT_GE(val, -1.1f);
         EXPECT_LE(val, 1.1f);
