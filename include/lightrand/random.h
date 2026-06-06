@@ -34,8 +34,8 @@ private:
 
 public:
   using result_type = std::uint64_t;
-  static constexpr std::uint64_t min() { return 0; }
-  static constexpr std::uint64_t max() {
+  [[nodiscard]] static constexpr std::uint64_t min() { return 0; }
+  [[nodiscard]] static constexpr std::uint64_t max() {
     return std::numeric_limits<std::uint64_t>::max();
   }
 
@@ -90,8 +90,8 @@ private:
 public:
   using type = std::uint64_t;
   using result_type = std::uint64_t;
-  static constexpr std::uint64_t min() { return 0; }
-  static constexpr std::uint64_t max() {
+  [[nodiscard]] static constexpr std::uint64_t min() { return 0; }
+  [[nodiscard]] static constexpr std::uint64_t max() {
     return std::numeric_limits<std::uint64_t>::max();
   }
 
@@ -219,7 +219,7 @@ public:
    *
    * @return A uniformly distributed 64-bit unsigned integer.
    */
-  std::uint64_t random() { return urbg_(); }
+  [[nodiscard]] std::uint64_t random() { return urbg_(); }
 
   /**
    * @brief Generates a uniformly distributed random integer in the closed
@@ -234,7 +234,7 @@ public:
    * @return A uniformly distributed random integer.
    */
   template <std::integral T>
-  T uniform(T lo, T hi = std::numeric_limits<T>::max()) {
+  [[nodiscard]] T uniform(T lo, T hi = std::numeric_limits<T>::max()) {
     // Calculate the total number of bounds (the distance between lo and hi)
     std::uint64_t range =
         static_cast<std::uint64_t>(hi) - static_cast<std::uint64_t>(lo);
@@ -264,7 +264,7 @@ public:
    * @tparam T The floating-point type of the generated value.
    * @return A uniformly distributed random floating-point number.
    */
-  template <std::floating_point T> T uniform() {
+  template <std::floating_point T> [[nodiscard]] T uniform() {
     // Use exactly the number of bits that the floating point type's mantissa
     // can represent
     constexpr int bits = std::numeric_limits<T>::digits < 64
@@ -287,7 +287,8 @@ public:
    * @param hi The upper bound of the range (exclusive).
    * @return A uniformly distributed random floating-point number.
    */
-  template <std::floating_point T> T uniform(T lo, T hi = static_cast<T>(1.0)) {
+  template <std::floating_point T>
+  [[nodiscard]] T uniform(T lo, T hi = static_cast<T>(1.0)) {
     T result = std::lerp(lo, hi, uniform<T>());
     return result == hi ? std::nextafter(hi, lo) : result;
   }
@@ -300,7 +301,7 @@ public:
    * @tparam T The floating-point type of the generated value.
    * @return A normally distributed random floating-point number.
    */
-  template <std::floating_point T> T normal() {
+  template <std::floating_point T> [[nodiscard]] T normal() {
     const auto &zx = ziggurat::x;
 
     for (;;) {
@@ -356,7 +357,7 @@ public:
    * @return A normally distributed random floating-point number.
    */
   template <std::floating_point T>
-  T normal(T mean, T stddev = static_cast<T>(1.0)) {
+  [[nodiscard]] T normal(T mean, T stddev = static_cast<T>(1.0)) {
     return mean + stddev * normal<T>();
   }
 };

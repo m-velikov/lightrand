@@ -49,7 +49,7 @@ public:
    * @param x The x-coordinate to evaluate.
    * @return The noise value at the specified coordinate.
    */
-  float eval(float x) const {
+  [[nodiscard]] float eval(float x) const {
     // Determine grid cell coordinates
     float xi = std::floor(x);
     // Determine relative x position within the cell
@@ -103,7 +103,7 @@ public:
    * @param y The y-coordinate to evaluate.
    * @return The noise value at the specified coordinates.
    */
-  float eval(float x, float y) const {
+  [[nodiscard]] float eval(float x, float y) const {
     // Determine grid cell coordinates
     float xi = std::floor(x);
     float yi = std::floor(y);
@@ -182,7 +182,7 @@ public:
    * @param z The z-coordinate to evaluate.
    * @return The noise value at the specified coordinates.
    */
-  float eval(float x, float y, float z) const {
+  [[nodiscard]] float eval(float x, float y, float z) const {
     // Determine grid cell coordinates
     float xi = std::floor(x);
     float yi = std::floor(y);
