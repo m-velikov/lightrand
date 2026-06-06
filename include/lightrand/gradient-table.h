@@ -52,7 +52,7 @@ class gradient_table {
 
 private:
   std::array<GradientType, TABLE_SIZE> grad;
-  std::array<std::uint32_t, TABLE_SIZE * 2> perm;
+  std::array<std::uint32_t, TABLE_SIZE * 2ull> perm;
 
 public:
   gradient_table(generator &gen) {
