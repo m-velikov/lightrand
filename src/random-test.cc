@@ -30,25 +30,9 @@ TEST(SplitMix64Test, Determinism) {
     EXPECT_EQ(gen1(), gen2());
 }
 
-TEST(SplitMix64Test, DefaultSeed) {
-  lightrand::splitmix64 gen1;
-  lightrand::splitmix64 gen2(0xcafebabe);
-
-  for (int i = 0; i < 100; ++i)
-    EXPECT_EQ(gen1(), gen2());
-}
-
 TEST(Xoshiro256StarStarTest, Determinism) {
   lightrand::xoshiro256starstar gen1(1337);
   lightrand::xoshiro256starstar gen2(1337);
-
-  for (int i = 0; i < 100; ++i)
-    EXPECT_EQ(gen1(), gen2());
-}
-
-TEST(Xoshiro256StarStarTest, DefaultSeed) {
-  lightrand::xoshiro256starstar gen1;
-  lightrand::xoshiro256starstar gen2(0xc0ffeef00d);
 
   for (int i = 0; i < 100; ++i)
     EXPECT_EQ(gen1(), gen2());

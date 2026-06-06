@@ -7,6 +7,8 @@
 #include <cstdint>
 #include <iostream>
 #include <limits>
+#include <optional>
+#include <random>
 
 namespace lightrand {
 
@@ -41,10 +43,19 @@ public:
   /**
    * @brief Constructs a SplitMix64 generator with an optional seed.
    *
-   * @param s An optional seed value. If not provided, the generator will
-   *          be initialized with a default seed.
+   * @param s An optional seed value. If std::nullopt, the generator will
+   *          be initialized using std::random_device.
    */
-  explicit splitmix64(std::uint64_t s = 0xcafebabe) { seed(s); }
+  explicit splitmix64(std::optional<std::uint64_t> s = std::nullopt) {
+    std::uint64_t seed_val;
+    if (!s) {
+      std::random_device rd;
+      seed_val = (static_cast<std::uint64_t>(rd()) << 32) | rd();
+    } else {
+      seed_val = *s;
+    }
+    seed(seed_val);
+  }
 
   /**
    * @brief Seeds the generator with a new seed.
@@ -97,10 +108,19 @@ public:
   /**
    * @brief Constructs a xoshiro256** generator with an optional seed.
    *
-   * @param s An optional seed value. If not provided, the generator will
-   *             be initialized with a default seed.
+   * @param s An optional seed value. If std::nullopt, the generator will
+   *             be initialized using std::random_device.
    */
-  explicit xoshiro256starstar(std::uint64_t s = 0xc0ffeef00d) { seed(s); }
+  explicit xoshiro256starstar(std::optional<std::uint64_t> s = std::nullopt) {
+    std::uint64_t seed_val;
+    if (!s) {
+      std::random_device rd;
+      seed_val = (static_cast<std::uint64_t>(rd()) << 32) | rd();
+    } else {
+      seed_val = *s;
+    }
+    seed(seed_val);
+  }
 
   /**
    * @brief Seeds the generator with a new seed.
@@ -194,9 +214,11 @@ public:
    * @param s An optional seed value used to initialize the generator.
    * @param eng The underlying uniform random bit generator (URBG) engine.
    */
-  explicit generator(std::uint64_t s = 0xc0ffeef00d, engine &eng = global_urbg)
+  explicit generator(std::optional<std::uint64_t> s = std::nullopt,
+                     engine &eng = global_urbg)
       : urbg_(eng) {
-    seed(s);
+    if (s)
+      seed(*s);
   }
 
   /**
