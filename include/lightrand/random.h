@@ -173,7 +173,7 @@ extern thread_local xoshiro256starstar thread_urbg;
 namespace ziggurat {
 constexpr unsigned N = 256;
 constexpr double R = 3.6541528853610088;
-extern const double x[];
+extern const std::array<double, N + 1> x;
 } // namespace ziggurat
 
 /**

@@ -1,9 +1,9 @@
-#include <cstdint>
+#include <array>
 
-namespace lightrand {
-namespace ziggurat {
+namespace lightrand::ziggurat {
 
-extern const double x[] = {
+// NOLINTBEGIN(modernize-use-std-numbers)
+extern const std::array<double, 257> x = {
     0x1.f493b78164498p+1, // 3.91075795953709
     0x1.d3bb48209ad33p+1, // 3.6541528853610088
     0x1.b981f3878f995p+1, // 3.4492782985609645
@@ -262,6 +262,6 @@ extern const double x[] = {
     0x1.b8d0be3d69918p-3, // 0.21524189591327381
     0x0p+0,               // 0
 };
+// NOLINTEND(modernize-use-std-numbers)
 
-} // namespace ziggurat
-} // namespace lightrand
+} // namespace lightrand::ziggurat
