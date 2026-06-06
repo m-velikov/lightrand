@@ -92,11 +92,11 @@ TEST(GeneratorTest, UniformFloatDefaultRange) {
   lightrand::generator gen(12345);
 
   for (int i = 0; i < 1000; ++i) {
-    double val_d = gen.uniform<double>();
+    auto val_d = gen.uniform<double>();
     EXPECT_GE(val_d, 0.0);
     EXPECT_LT(val_d, 1.0);
 
-    float val_f = gen.uniform<float>();
+    auto val_f = gen.uniform<float>();
     EXPECT_GE(val_f, 0.0f);
     EXPECT_LT(val_f, 1.0f);
   }
@@ -108,7 +108,7 @@ TEST(GeneratorTest, UniformFloatCustomRange) {
   double max_val = 5.5;
 
   for (int i = 0; i < 1000; ++i) {
-    double val = gen.uniform<double>(min_val, max_val);
+    auto val = gen.uniform<double>(min_val, max_val);
     EXPECT_GE(val, min_val);
     EXPECT_LT(val, max_val);
   }
@@ -119,7 +119,7 @@ TEST(GeneratorTest, UniformFloatDefaultHi) {
   double min_val = 0.5;
 
   for (int i = 0; i < 1000; ++i) {
-    double val = gen.uniform<double>(min_val);
+    auto val = gen.uniform<double>(min_val);
     EXPECT_GE(val, min_val);
     EXPECT_LE(val, 1.0);
   }
@@ -135,7 +135,7 @@ TEST(GeneratorTest, NormalDistributionStats) {
   const double expected_stddev = 2.0;
 
   for (int i = 0; i < n; ++i) {
-    double val = gen.normal<double>(expected_mean, expected_stddev);
+    auto val = gen.normal<double>(expected_mean, expected_stddev);
     sum += val;
     sq_sum += val * val;
   }
@@ -160,7 +160,7 @@ TEST(GeneratorTest, NormalDefaultStddev) {
 
   for (int i = 0; i < n; ++i) {
     // Pass only the mean, leaving standard deviation defaulted to 1.0
-    double val = gen.normal<double>(expected_mean);
+    auto val = gen.normal<double>(expected_mean);
     sum += val;
     sq_sum += val * val;
   }
