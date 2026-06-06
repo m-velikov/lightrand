@@ -2,9 +2,25 @@
 
 #include <gtest/gtest.h>
 
+#include <cmath>
+#include <cstdint>
+#include <limits>
+
 namespace {
 
 // --- PRNG Engine Tests ---
+
+TEST(SplitMix64Test, MinMax) {
+  EXPECT_EQ(lightrand::splitmix64::min(), 0);
+  EXPECT_EQ(lightrand::splitmix64::max(),
+            std::numeric_limits<std::uint64_t>::max());
+}
+
+TEST(Xoshiro256StarStarTest, MinMax) {
+  EXPECT_EQ(lightrand::xoshiro256starstar::min(), 0);
+  EXPECT_EQ(lightrand::xoshiro256starstar::max(),
+            std::numeric_limits<std::uint64_t>::max());
+}
 
 TEST(SplitMix64Test, Determinism) {
   lightrand::splitmix64 gen1(42);
