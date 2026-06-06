@@ -2,16 +2,18 @@
 #include <benchmark/benchmark.h>
 #include <random>
 
+namespace {
+
 // --- PRNG Engines ---
 
-static void BM_Engine_MT19937_64(benchmark::State &state) {
+void BM_Engine_MT19937_64(benchmark::State &state) {
   std::mt19937_64 eng(12345);
   for (auto _ : state)
     benchmark::DoNotOptimize(eng());
 }
 BENCHMARK(BM_Engine_MT19937_64);
 
-static void BM_Engine_Xoshiro256StarStar(benchmark::State &state) {
+void BM_Engine_Xoshiro256StarStar(benchmark::State &state) {
   lightrand::xoshiro256starstar eng(12345);
   for (auto _ : state)
     benchmark::DoNotOptimize(eng());
@@ -20,7 +22,7 @@ BENCHMARK(BM_Engine_Xoshiro256StarStar);
 
 // --- Uniform Integer Distribution ---
 
-static void BM_StdUniformInt(benchmark::State &state) {
+void BM_StdUniformInt(benchmark::State &state) {
   lightrand::xoshiro256starstar eng(12345);
   std::uniform_int_distribution<int> dist(10, 1000);
   for (auto _ : state)
@@ -28,7 +30,7 @@ static void BM_StdUniformInt(benchmark::State &state) {
 }
 BENCHMARK(BM_StdUniformInt);
 
-static void BM_StdUniformInt_MT(benchmark::State &state) {
+void BM_StdUniformInt_MT(benchmark::State &state) {
   std::mt19937_64 eng(12345);
   std::uniform_int_distribution<int> dist(10, 1000);
   for (auto _ : state)
@@ -36,7 +38,7 @@ static void BM_StdUniformInt_MT(benchmark::State &state) {
 }
 BENCHMARK(BM_StdUniformInt_MT);
 
-static void BM_LightrandUniformInt(benchmark::State &state) {
+void BM_LightrandUniformInt(benchmark::State &state) {
   lightrand::xoshiro256starstar eng(12345);
   lightrand::generator gen(12345, eng);
   for (auto _ : state)
@@ -46,7 +48,7 @@ BENCHMARK(BM_LightrandUniformInt);
 
 // --- Uniform Real Distribution ---
 
-static void BM_StdUniformReal(benchmark::State &state) {
+void BM_StdUniformReal(benchmark::State &state) {
   lightrand::xoshiro256starstar eng(12345);
   std::uniform_real_distribution<double> dist(0.0, 1.0);
   for (auto _ : state)
@@ -54,7 +56,7 @@ static void BM_StdUniformReal(benchmark::State &state) {
 }
 BENCHMARK(BM_StdUniformReal);
 
-static void BM_StdUniformReal_MT(benchmark::State &state) {
+void BM_StdUniformReal_MT(benchmark::State &state) {
   std::mt19937_64 eng(12345);
   std::uniform_real_distribution<double> dist(0.0, 1.0);
   for (auto _ : state)
@@ -62,7 +64,7 @@ static void BM_StdUniformReal_MT(benchmark::State &state) {
 }
 BENCHMARK(BM_StdUniformReal_MT);
 
-static void BM_LightrandUniformReal(benchmark::State &state) {
+void BM_LightrandUniformReal(benchmark::State &state) {
   lightrand::xoshiro256starstar eng(12345);
   lightrand::generator gen(12345, eng);
   for (auto _ : state)
@@ -72,7 +74,7 @@ BENCHMARK(BM_LightrandUniformReal);
 
 // --- Normal Distribution ---
 
-static void BM_StdNormal(benchmark::State &state) {
+void BM_StdNormal(benchmark::State &state) {
   lightrand::xoshiro256starstar eng(12345);
   std::normal_distribution<double> dist(0.0, 1.0);
   for (auto _ : state)
@@ -80,7 +82,7 @@ static void BM_StdNormal(benchmark::State &state) {
 }
 BENCHMARK(BM_StdNormal);
 
-static void BM_StdNormal_MT(benchmark::State &state) {
+void BM_StdNormal_MT(benchmark::State &state) {
   std::mt19937_64 eng(12345);
   std::normal_distribution<double> dist(0.0, 1.0);
   for (auto _ : state)
@@ -88,12 +90,14 @@ static void BM_StdNormal_MT(benchmark::State &state) {
 }
 BENCHMARK(BM_StdNormal_MT);
 
-static void BM_LightrandNormal(benchmark::State &state) {
+void BM_LightrandNormal(benchmark::State &state) {
   lightrand::xoshiro256starstar eng(12345);
   lightrand::generator gen(12345, eng);
   for (auto _ : state)
     benchmark::DoNotOptimize(gen.normal<double>());
 }
 BENCHMARK(BM_LightrandNormal);
+
+} // namespace
 
 BENCHMARK_MAIN();

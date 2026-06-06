@@ -2,9 +2,11 @@
 #include "lightrand/simplex.h"
 #include <benchmark/benchmark.h>
 
+namespace {
+
 // --- 2D Simplex Benchmarks ---
 
-static void BM_Simplex2D_Construct(benchmark::State &state) {
+void BM_Simplex2D_Construct(benchmark::State &state) {
   lightrand::generator gen;
   for (auto _ : state) {
     lightrand::simplex2d<> noise(gen);
@@ -13,7 +15,7 @@ static void BM_Simplex2D_Construct(benchmark::State &state) {
 }
 BENCHMARK(BM_Simplex2D_Construct);
 
-static void BM_Simplex2D_Eval(benchmark::State &state) {
+void BM_Simplex2D_Eval(benchmark::State &state) {
   lightrand::generator gen;
   lightrand::simplex2d<> noise(gen);
   float x = 0.1f, y = 0.2f;
@@ -27,7 +29,7 @@ BENCHMARK(BM_Simplex2D_Eval);
 
 // --- 3D Simplex Benchmarks ---
 
-static void BM_Simplex3D_Construct(benchmark::State &state) {
+void BM_Simplex3D_Construct(benchmark::State &state) {
   lightrand::generator gen;
   for (auto _ : state) {
     lightrand::simplex3d<> noise(gen);
@@ -36,7 +38,7 @@ static void BM_Simplex3D_Construct(benchmark::State &state) {
 }
 BENCHMARK(BM_Simplex3D_Construct);
 
-static void BM_Simplex3D_Eval(benchmark::State &state) {
+void BM_Simplex3D_Eval(benchmark::State &state) {
   lightrand::generator gen;
   lightrand::simplex3d<> noise(gen);
   float x = 0.1f, y = 0.2f, z = 0.3f;
@@ -48,3 +50,5 @@ static void BM_Simplex3D_Eval(benchmark::State &state) {
   }
 }
 BENCHMARK(BM_Simplex3D_Eval);
+
+} // namespace

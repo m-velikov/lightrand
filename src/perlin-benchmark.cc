@@ -2,9 +2,11 @@
 #include "lightrand/random.h"
 #include <benchmark/benchmark.h>
 
+namespace {
+
 // --- 1D Perlin Benchmarks ---
 
-static void BM_Perlin1D_Construct(benchmark::State &state) {
+void BM_Perlin1D_Construct(benchmark::State &state) {
   lightrand::generator gen;
   for (auto _ : state) {
     lightrand::perlin1d<> noise(gen);
@@ -13,7 +15,7 @@ static void BM_Perlin1D_Construct(benchmark::State &state) {
 }
 BENCHMARK(BM_Perlin1D_Construct);
 
-static void BM_Perlin1D_Eval(benchmark::State &state) {
+void BM_Perlin1D_Eval(benchmark::State &state) {
   lightrand::generator gen;
   lightrand::perlin1d<> noise(gen);
   float x = 0.1f;
@@ -26,7 +28,7 @@ BENCHMARK(BM_Perlin1D_Eval);
 
 // --- 2D Perlin Benchmarks ---
 
-static void BM_Perlin2D_Construct(benchmark::State &state) {
+void BM_Perlin2D_Construct(benchmark::State &state) {
   lightrand::generator gen;
   for (auto _ : state) {
     lightrand::perlin2d<> noise(gen);
@@ -35,7 +37,7 @@ static void BM_Perlin2D_Construct(benchmark::State &state) {
 }
 BENCHMARK(BM_Perlin2D_Construct);
 
-static void BM_Perlin2D_Eval(benchmark::State &state) {
+void BM_Perlin2D_Eval(benchmark::State &state) {
   lightrand::generator gen;
   lightrand::perlin2d<> noise(gen);
   float x = 0.1f, y = 0.2f;
@@ -49,7 +51,7 @@ BENCHMARK(BM_Perlin2D_Eval);
 
 // --- 3D Perlin Benchmarks ---
 
-static void BM_Perlin3D_Construct(benchmark::State &state) {
+void BM_Perlin3D_Construct(benchmark::State &state) {
   lightrand::generator gen;
   for (auto _ : state) {
     lightrand::perlin3d<> noise(gen);
@@ -58,7 +60,7 @@ static void BM_Perlin3D_Construct(benchmark::State &state) {
 }
 BENCHMARK(BM_Perlin3D_Construct);
 
-static void BM_Perlin3D_Eval(benchmark::State &state) {
+void BM_Perlin3D_Eval(benchmark::State &state) {
   lightrand::generator gen;
   lightrand::perlin3d<> noise(gen);
   float x = 0.1f, y = 0.2f, z = 0.3f;
@@ -70,3 +72,5 @@ static void BM_Perlin3D_Eval(benchmark::State &state) {
   }
 }
 BENCHMARK(BM_Perlin3D_Eval);
+
+} // namespace
