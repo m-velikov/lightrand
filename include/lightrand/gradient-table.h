@@ -10,8 +10,13 @@
 #include <numeric>
 #include <type_traits>
 
-namespace lightrand {
-namespace detail {
+namespace lightrand::detail {
+
+// Wraps an cell grid coordinate into the bounds of the tables.
+inline std::uint32_t wrap_grid_coord(float coord, std::uint32_t size_mask) {
+  return static_cast<std::uint32_t>(static_cast<std::int32_t>(coord)) &
+         size_mask;
+}
 
 struct vec2 {
   static float dot(const vec2 &a, const vec2 &b) {
@@ -99,5 +104,4 @@ private:
   }
 };
 
-} // namespace detail
-} // namespace lightrand
+} // namespace lightrand::detail

@@ -51,43 +51,43 @@ public:
 
     // Skew the input space to determine which simplex cell we're in
     float s = (x + y) * F2;
-    std::int32_t i = static_cast<std::int32_t>(std::floor(x + s));
-    std::int32_t j = static_cast<std::int32_t>(std::floor(y + s));
+    float i = std::floor(x + s);
+    float j = std::floor(y + s);
 
     // Unskew the cell origin back to (x,y) space
-    float t = static_cast<float>(i + j) * G2;
-    float X0 = static_cast<float>(i) - t;
-    float Y0 = static_cast<float>(j) - t;
+    float t = (i + j) * G2;
+    float X0 = i - t;
+    float Y0 = j - t;
 
     // The x,y distances from the cell origin
     float dx0 = x - X0;
     float dy0 = y - Y0;
 
     // Determine which simplex we are in to find the second corner
-    std::int32_t i1, j1;
+    float i1, j1;
     if (dx0 > dy0) {
-      i1 = 1;
-      j1 = 0; // Lower triangle, XY order
+      i1 = 1.0f;
+      j1 = 0.0f; // Lower triangle, XY order
     } else {
-      i1 = 0;
-      j1 = 1; // Upper triangle, YX order
+      i1 = 0.0f;
+      j1 = 1.0f; // Upper triangle, YX order
     }
 
     // Distances from the second and third corners
-    float dx1 = dx0 - static_cast<float>(i1) + G2;
-    float dy1 = dy0 - static_cast<float>(j1) + G2;
+    float dx1 = dx0 - i1 + G2;
+    float dy1 = dy0 - j1 + G2;
     float dx2 = dx0 - 1.0f + 2.0f * G2;
     float dy2 = dy0 - 1.0f + 2.0f * G2;
 
-    const std::uint32_t sizeMask = TABLE_SIZE - 1;
+    const std::uint32_t size_mask = TABLE_SIZE - 1;
 
     // Wrap grid coordinates within table bounds
-    std::uint32_t hi0 = static_cast<std::uint32_t>(i) & sizeMask;
-    std::uint32_t hj0 = static_cast<std::uint32_t>(j) & sizeMask;
-    std::uint32_t hi1 = static_cast<std::uint32_t>(i + i1) & sizeMask;
-    std::uint32_t hj1 = static_cast<std::uint32_t>(j + j1) & sizeMask;
-    std::uint32_t hi2 = static_cast<std::uint32_t>(i + 1) & sizeMask;
-    std::uint32_t hj2 = static_cast<std::uint32_t>(j + 1) & sizeMask;
+    std::uint32_t hi0 = detail::wrap_grid_coord(i, size_mask);
+    std::uint32_t hj0 = detail::wrap_grid_coord(j, size_mask);
+    std::uint32_t hi1 = detail::wrap_grid_coord(i + i1, size_mask);
+    std::uint32_t hj1 = detail::wrap_grid_coord(j + j1, size_mask);
+    std::uint32_t hi2 = detail::wrap_grid_coord(i + 1.0f, size_mask);
+    std::uint32_t hj2 = detail::wrap_grid_coord(j + 1.0f, size_mask);
 
     // Calculate the radial falloff contributions from the three corners
     float n0, n1, n2;
@@ -165,15 +165,15 @@ public:
 
     // Skew the input space to determine which simplex cell we're in
     float s = (x + y + z) * F3;
-    std::int32_t i = static_cast<std::int32_t>(std::floor(x + s));
-    std::int32_t j = static_cast<std::int32_t>(std::floor(y + s));
-    std::int32_t k = static_cast<std::int32_t>(std::floor(z + s));
+    float i = std::floor(x + s);
+    float j = std::floor(y + s);
+    float k = std::floor(z + s);
 
     // Unskew the cell origin back to (x,y,z) space
-    float t = static_cast<float>(i + j + k) * G3;
-    float X0 = static_cast<float>(i) - t;
-    float Y0 = static_cast<float>(j) - t;
-    float Z0 = static_cast<float>(k) - t;
+    float t = (i + j + k) * G3;
+    float X0 = i - t;
+    float Y0 = j - t;
+    float Z0 = k - t;
 
     // The x,y,z distances from the cell origin
     float dx0 = x - X0;
@@ -181,76 +181,76 @@ public:
     float dz0 = z - Z0;
 
     // Determine which simplex we are in
-    std::int32_t i1, j1, k1; // Offsets for second corner
-    std::int32_t i2, j2, k2; // Offsets for third corner
+    float i1, j1, k1; // Offsets for second corner
+    float i2, j2, k2; // Offsets for third corner
 
     if (dx0 >= dy0) {
       if (dy0 >= dz0) {
-        i1 = 1;
-        j1 = 0;
-        k1 = 0;
-        i2 = 1;
-        j2 = 1;
-        k2 = 0; // X Y Z order
+        i1 = 1.0f;
+        j1 = 0.0f;
+        k1 = 0.0f;
+        i2 = 1.0f;
+        j2 = 1.0f;
+        k2 = 0.0f; // X Y Z order
       } else if (dx0 >= dz0) {
-        i1 = 1;
-        j1 = 0;
-        k1 = 0;
-        i2 = 1;
-        j2 = 0;
-        k2 = 1; // X Z Y order
+        i1 = 1.0f;
+        j1 = 0.0f;
+        k1 = 0.0f;
+        i2 = 1.0f;
+        j2 = 0.0f;
+        k2 = 1.0f; // X Z Y order
       } else {
-        i1 = 0;
-        j1 = 0;
-        k1 = 1;
-        i2 = 1;
-        j2 = 0;
-        k2 = 1; // Z X Y order
+        i1 = 0.0f;
+        j1 = 0.0f;
+        k1 = 1.0f;
+        i2 = 1.0f;
+        j2 = 0.0f;
+        k2 = 1.0f; // Z X Y order
       }
     } else { // dx0 < dy0
       if (dy0 < dz0) {
-        i1 = 0;
-        j1 = 0;
-        k1 = 1;
-        i2 = 0;
-        j2 = 1;
-        k2 = 1; // Z Y X order
+        i1 = 0.0f;
+        j1 = 0.0f;
+        k1 = 1.0f;
+        i2 = 0.0f;
+        j2 = 1.0f;
+        k2 = 1.0f; // Z Y X order
       } else if (dx0 < dz0) {
-        i1 = 0;
-        j1 = 1;
-        k1 = 0;
-        i2 = 0;
-        j2 = 1;
-        k2 = 1; // Y Z X order
+        i1 = 0.0f;
+        j1 = 1.0f;
+        k1 = 0.0f;
+        i2 = 0.0f;
+        j2 = 1.0f;
+        k2 = 1.0f; // Y Z X order
       } else {
-        i1 = 0;
-        j1 = 1;
-        k1 = 0;
-        i2 = 1;
-        j2 = 1;
-        k2 = 0; // Y X Z order
+        i1 = 0.0f;
+        j1 = 1.0f;
+        k1 = 0.0f;
+        i2 = 1.0f;
+        j2 = 1.0f;
+        k2 = 0.0f; // Y X Z order
       }
     }
 
     // Distances from the second, third, and fourth corners
-    float dx1 = dx0 - static_cast<float>(i1) + G3;
-    float dy1 = dy0 - static_cast<float>(j1) + G3;
-    float dz1 = dz0 - static_cast<float>(k1) + G3;
+    float dx1 = dx0 - i1 + G3;
+    float dy1 = dy0 - j1 + G3;
+    float dz1 = dz0 - k1 + G3;
 
-    float dx2 = dx0 - static_cast<float>(i2) + 2.0f * G3;
-    float dy2 = dy0 - static_cast<float>(j2) + 2.0f * G3;
-    float dz2 = dz0 - static_cast<float>(k2) + 2.0f * G3;
+    float dx2 = dx0 - i2 + 2.0f * G3;
+    float dy2 = dy0 - j2 + 2.0f * G3;
+    float dz2 = dz0 - k2 + 2.0f * G3;
 
     float dx3 = dx0 - 1.0f + 3.0f * G3;
     float dy3 = dy0 - 1.0f + 3.0f * G3;
     float dz3 = dz0 - 1.0f + 3.0f * G3;
 
-    const std::uint32_t sizeMask = TABLE_SIZE - 1;
+    const std::uint32_t size_mask = TABLE_SIZE - 1;
 
     // Wrap grid coordinates within table bounds
-    std::uint32_t hi = static_cast<std::uint32_t>(i) & sizeMask;
-    std::uint32_t hj = static_cast<std::uint32_t>(j) & sizeMask;
-    std::uint32_t hk = static_cast<std::uint32_t>(k) & sizeMask;
+    std::uint32_t hi = detail::wrap_grid_coord(i, size_mask);
+    std::uint32_t hj = detail::wrap_grid_coord(j, size_mask);
+    std::uint32_t hk = detail::wrap_grid_coord(k, size_mask);
 
     // Calculate the radial falloff contributions from the four corners
     float n0, n1, n2, n3;
@@ -271,8 +271,9 @@ public:
       t1 *= t1;
       detail::vec3 p1 = {dx1, dy1, dz1};
       n1 = t1 * t1 *
-           detail::vec3::dot(ctx((hi + i1) & sizeMask, (hj + j1) & sizeMask,
-                                 (hk + k1) & sizeMask),
+           detail::vec3::dot(ctx(detail::wrap_grid_coord(i + i1, size_mask),
+                                 detail::wrap_grid_coord(j + j1, size_mask),
+                                 detail::wrap_grid_coord(k + k1, size_mask)),
                              p1);
     }
 
@@ -283,8 +284,9 @@ public:
       t2 *= t2;
       detail::vec3 p2 = {dx2, dy2, dz2};
       n2 = t2 * t2 *
-           detail::vec3::dot(ctx((hi + i2) & sizeMask, (hj + j2) & sizeMask,
-                                 (hk + k2) & sizeMask),
+           detail::vec3::dot(ctx(detail::wrap_grid_coord(i + i2, size_mask),
+                                 detail::wrap_grid_coord(j + j2, size_mask),
+                                 detail::wrap_grid_coord(k + k2, size_mask)),
                              p2);
     }
 
@@ -295,8 +297,9 @@ public:
       t3 *= t3;
       detail::vec3 p3 = {dx3, dy3, dz3};
       n3 = t3 * t3 *
-           detail::vec3::dot(ctx((hi + 1) & sizeMask, (hj + 1) & sizeMask,
-                                 (hk + 1) & sizeMask),
+           detail::vec3::dot(ctx(detail::wrap_grid_coord(i + 1.0f, size_mask),
+                                 detail::wrap_grid_coord(j + 1.0f, size_mask),
+                                 detail::wrap_grid_coord(k + 1.0f, size_mask)),
                              p3);
     }
 

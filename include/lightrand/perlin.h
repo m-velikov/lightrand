@@ -51,15 +51,15 @@ public:
    */
   float eval(float x) const {
     // Determine grid cell coordinates
-    std::int32_t xi = static_cast<std::int32_t>(std::floor(x));
+    float xi = std::floor(x);
     // Determine relative x position within the cell
     float tx = x - xi;
 
-    const std::uint32_t sizeMask = TABLE_SIZE - 1;
+    const std::uint32_t size_mask = TABLE_SIZE - 1;
 
     // Apply bitmask to wrap grid coordinates within table bounds
-    std::uint32_t rx0 = static_cast<std::uint32_t>(xi) & sizeMask;
-    std::uint32_t rx1 = (rx0 + 1) & sizeMask;
+    std::uint32_t rx0 = detail::wrap_grid_coord(xi, size_mask);
+    std::uint32_t rx1 = (rx0 + 1) & size_mask;
 
     // Fetch gradients and compute the dot product between the gradient and
     // distance vector
@@ -105,20 +105,20 @@ public:
    */
   float eval(float x, float y) const {
     // Determine grid cell coordinates
-    std::int32_t xi = static_cast<std::int32_t>(std::floor(x));
-    std::int32_t yi = static_cast<std::int32_t>(std::floor(y));
+    float xi = std::floor(x);
+    float yi = std::floor(y);
 
     // Determine relative x, y position within the cell
     float tx = x - xi;
     float ty = y - yi;
 
-    const std::uint32_t sizeMask = TABLE_SIZE - 1;
+    const std::uint32_t size_mask = TABLE_SIZE - 1;
 
     // Apply bitmask to wrap grid coordinates within table bounds
-    std::uint32_t rx0 = static_cast<std::uint32_t>(xi) & sizeMask;
-    std::uint32_t rx1 = (rx0 + 1) & sizeMask;
-    std::uint32_t ry0 = static_cast<std::uint32_t>(yi) & sizeMask;
-    std::uint32_t ry1 = (ry0 + 1) & sizeMask;
+    std::uint32_t rx0 = detail::wrap_grid_coord(xi, size_mask);
+    std::uint32_t rx1 = (rx0 + 1) & size_mask;
+    std::uint32_t ry0 = detail::wrap_grid_coord(yi, size_mask);
+    std::uint32_t ry1 = (ry0 + 1) & size_mask;
 
     // Fetch gradients at the 4 corners of the grid cell
     const detail::vec2 &c00 = ctx(rx0, ry0);
@@ -184,24 +184,24 @@ public:
    */
   float eval(float x, float y, float z) const {
     // Determine grid cell coordinates
-    std::int32_t xi = static_cast<std::int32_t>(std::floor(x));
-    std::int32_t yi = static_cast<std::int32_t>(std::floor(y));
-    std::int32_t zi = static_cast<std::int32_t>(std::floor(z));
+    float xi = std::floor(x);
+    float yi = std::floor(y);
+    float zi = std::floor(z);
 
     // Determine relative x, y, z position within the cell
     float tx = x - xi;
     float ty = y - yi;
     float tz = z - zi;
 
-    const std::uint32_t sizeMask = TABLE_SIZE - 1;
+    const std::uint32_t size_mask = TABLE_SIZE - 1;
 
     // Apply bitmask to wrap grid coordinates within table bounds
-    std::uint32_t rx0 = static_cast<std::uint32_t>(xi) & sizeMask;
-    std::uint32_t rx1 = (rx0 + 1) & sizeMask;
-    std::uint32_t ry0 = static_cast<std::uint32_t>(yi) & sizeMask;
-    std::uint32_t ry1 = (ry0 + 1) & sizeMask;
-    std::uint32_t rz0 = static_cast<std::uint32_t>(zi) & sizeMask;
-    std::uint32_t rz1 = (rz0 + 1) & sizeMask;
+    std::uint32_t rx0 = detail::wrap_grid_coord(xi, size_mask);
+    std::uint32_t rx1 = (rx0 + 1) & size_mask;
+    std::uint32_t ry0 = detail::wrap_grid_coord(yi, size_mask);
+    std::uint32_t ry1 = (ry0 + 1) & size_mask;
+    std::uint32_t rz0 = detail::wrap_grid_coord(zi, size_mask);
+    std::uint32_t rz1 = (rz0 + 1) & size_mask;
 
     // Fetch gradients at the 8 corners of the grid cube
     const detail::vec3 &c000 = ctx(rx0, ry0, rz0);
