@@ -28,6 +28,12 @@ if(NOT CMAKE_BINARY_DIR STREQUAL _comp_db_dest)
     )
 endif()
 
+if(MSVC)
+    set(CMAKE_CXX_CLANG_TIDY "clang-tidy;--extra-arg=/EHsc;--extra-arg=-D_WIN32")
+else()
+    set(CMAKE_CXX_CLANG_TIDY "clang-tidy")
+endif()
+
 find_package(GTest REQUIRED)
 include(GoogleTest)
 enable_testing()
@@ -98,3 +104,14 @@ target_link_libraries(gen-uniform PRIVATE argparse::argparse lightrand)
 
 add_executable(gen-normal src/gen-normal.cc)
 target_link_libraries(gen-normal PRIVATE argparse::argparse lightrand)
+
+find_program(CPPCHECK_CMD cppcheck)
+if(CPPCHECK_CMD)
+    add_custom_target(run-cppcheck
+        COMMAND ${CPPCHECK_CMD} --enable=all --library=googletest --check-level=exhaustive --suppress=missingIncludeSystem --suppress=constParameterCallback --suppress=unusedFunction --suppress=unmatchedSuppression --suppress=functionStatic --inline-suppr --language=c++ -I ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        COMMENT "Running cppcheck..."
+    )
+endif()

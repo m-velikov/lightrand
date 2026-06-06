@@ -16,3 +16,8 @@ repos:
     - id: clang-format
       args: [-i, --style=file]
       files: \.(c|cc|cpp|cxx|h|hh|hpp|hxx)$
+- repo: https://github.com/pocc/pre-commit-hooks
+  rev: v1.3.5
+  hooks:
+    - id: cppcheck
+      args: [--enable=all, --library=googletest, --check-level=exhaustive, --suppress=missingIncludeSystem, --suppress=constParameterCallback, --suppress=unusedFunction, --suppress=unmatchedSuppression, --suppress=functionStatic, --inline-suppr, --language=c++, -Iinclude]

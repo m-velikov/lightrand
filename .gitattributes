@@ -1,0 +1,16 @@
+# Force LF normalization for all text files
+* text eol=lf
+
+# Ensure bash scripts always use LF
+*.sh text eol=lf
+
+# C++ Source Code
+*.cpp text diff=cpp
+*.hpp text diff=cpp
+*.cc text diff=cpp
+*.c text diff=cpp
+*.h text diff=cpp
+
+# Build files
+CMakeLists.txt text
+*.cmake text

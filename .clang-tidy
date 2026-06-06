@@ -1,0 +1,28 @@
+---
+# Disable everything first, then opt-in
+Checks: >
+  -*,
+  bugprone-*,
+  performance-*,
+  modernize-*,
+  -modernize-use-trailing-return-type,
+  readability-*,
+  -readability-magic-numbers,
+  -readability-braces-around-statements,
+  -readability-identifier-length,
+  -readability-uppercase-literal-suffix,
+  -readability-math-missing-parentheses,
+  -readability-named-parameter,
+  -readability-isolate-declaration,
+  -readability-function-cognitive-complexity,
+  misc-*,
+  -misc-const-correctness,
+  -misc-non-private-member-variables-in-classes
+
+# On a new project, enforce it: treat all enabled warnings as errors
+# WarningsAsErrors: "*"
+
+# Automatically apply suggested fixes where safe
+HeaderFilterRegex: ".*"
+FormatStyle: file
+...
