@@ -5,8 +5,28 @@ project(lightrand LANGUAGES C CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_SCAN_FOR_MODULES OFF)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+# Determine where to copy compile_commands.json so the IDE can find it.
+# If the build directory is a subdirectory of 'build', copy it to the base 'build' folder.
+# Otherwise, copy it to the source root.
+string(FIND "${CMAKE_BINARY_DIR}" "${CMAKE_SOURCE_DIR}/build" _pos)
+if(_pos EQUAL 0)
+    set(_comp_db_dest "${CMAKE_SOURCE_DIR}/build")
+else()
+    set(_comp_db_dest "${CMAKE_SOURCE_DIR}")
+endif()
+
+if(NOT CMAKE_BINARY_DIR STREQUAL _comp_db_dest)
+    add_custom_target(copy_compile_commands ALL
+        COMMAND ${CMAKE_COMMAND} -E make_directory "${_comp_db_dest}"
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${CMAKE_BINARY_DIR}/compile_commands.json"
+            "${_comp_db_dest}/compile_commands.json"
+        COMMENT "Copying compile_commands.json to ${_comp_db_dest}"
+    )
+endif()
 
 find_package(GTest REQUIRED)
 include(GoogleTest)
