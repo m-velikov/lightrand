@@ -161,32 +161,11 @@ public:
 using engine = xoshiro256starstar;
 
 /**
- * @brief Global uniform random bit generator.
- *
- * This is a global instance of the xoshiro256** random number generator,
- * used as the default uniform random bit generator (URBG) throughout the
- * library. It provides a high-quality source of random bits for various
- * random number distributions.
- *
- * The `xoshiro256starstar` algorithm is a fast and statistically robust
- * pseudorandom number generator (PRNG) suitable for general-purpose use.
- *
- * This global instance is intended to be used as a default URBG
- * across different parts of the application.
- *
- * @see xoshiro256starstar
- */
-extern xoshiro256starstar global_urbg;
-
-/**
  * @brief Thread-local uniform random bit generator.
  *
  * This is a thread-local instance of the xoshiro256** random number generator.
- * Unlike `global_urbg`, it is safe to use concurrently across multiple threads
- * without requiring synchronization (such as mutexes),
  *
  * @see xoshiro256starstar
- * @see global_urbg
  */
 extern thread_local xoshiro256starstar thread_urbg;
 
@@ -211,11 +190,12 @@ public:
   /**
    * @brief Constructs a random number generator.
    *
-   * @param s An optional seed value used to initialize the generator.
+   * @param s An optional seed value used to initialize the generator. If
+   * std::nullopt, the engine is not re-seeded.
    * @param eng The underlying uniform random bit generator (URBG) engine.
    */
   explicit generator(std::optional<std::uint64_t> s = std::nullopt,
-                     engine &eng = global_urbg)
+                     engine &eng = thread_urbg)
       : urbg_(eng) {
     if (s)
       seed(*s);

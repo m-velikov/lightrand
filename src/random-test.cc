@@ -41,10 +41,11 @@ TEST(Xoshiro256StarStarTest, Determinism) {
 // --- Generator & Distribution Tests ---
 
 TEST(GeneratorTest, Determinism) {
-  lightrand::generator gen1(12345, lightrand::global_urbg);
-  lightrand::generator gen2(12345, lightrand::thread_urbg);
-  lightrand::engine eng(12345);
-  lightrand::generator gen3(12345, eng);
+  lightrand::generator gen1(12345, lightrand::thread_urbg);
+  lightrand::engine eng1(12345);
+  lightrand::generator gen2({}, eng1);
+  lightrand::engine eng2;
+  lightrand::generator gen3(12345, eng2);
 
   for (int i = 0; i < 100; ++i) {
     auto v1 = gen1.uniform<int>(10, 20);
@@ -56,8 +57,8 @@ TEST(GeneratorTest, Determinism) {
 }
 
 TEST(GeneratorTest, DefaultConstructor) {
-  // Instantiates with default seed (0xc0ffeef00d) and default engine
-  // (global_urbg)
+  // Instantiates with default seed (std::nullopt) and default engine
+  // (thread_urbg)
   lightrand::generator gen;
 
   int val = gen.uniform<int>(10, 20);

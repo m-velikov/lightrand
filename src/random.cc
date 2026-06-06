@@ -39,6 +39,4 @@ static_assert(
     "The xoshiro256starstar does not meet stdlib requirements for uniform "
     "random bit generartor");
 
-lightrand::xoshiro256starstar lightrand::global_urbg;
-
 thread_local lightrand::xoshiro256starstar lightrand::thread_urbg;

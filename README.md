@@ -137,7 +137,6 @@ int main() {
 
 *   `lightrand::splitmix64`: A 64-bit PRNG, mainly used for seeding other generators.
 *   `lightrand::xoshiro256starstar`: The default high-performance 64-bit PRNG with a 256-bit state.
-*   `lightrand::global_urbg`: A global instance of `xoshiro256starstar`. Not thread-safe.
 *   `lightrand::thread_urbg`: A `thread_local` instance of `xoshiro256starstar` for safe use in multi-threaded contexts.
 
 ### High-Level Interface
