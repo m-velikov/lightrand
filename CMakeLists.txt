@@ -8,6 +8,15 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_SCAN_FOR_MODULES OFF)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+# Set baseline to x86-64-v3 (AVX2) globally for x86_64 architectures
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(x86_64|amd64|AMD64)$")
+    if(MSVC)
+        add_compile_options(/arch:AVX2)
+    else()
+        add_compile_options(-march=x86-64-v3)
+    endif()
+endif()
+
 # Determine where to copy compile_commands.json so the IDE can find it.
 # If the build directory is a subdirectory of 'build', copy it to the base 'build' folder.
 # Otherwise, copy it to the source root.
