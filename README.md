@@ -103,8 +103,8 @@ The `generator` class provides a more convenient interface for common tasks like
 #include "lightrand/random.h"
 
 int main() {
-    // Use the thread-local generator instance for thread safety
-    lightrand::generator gen(0, lightrand::thread_urbg);
+    // Uses the thread-local generator instance (thread_urbg) by default
+    lightrand::generator gen;
     gen.seed(1337);
 
     // Generate a uniform integer in [1, 100]
