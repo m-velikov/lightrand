@@ -16,7 +16,7 @@ class Lightrand(ConanFile):
     )
 
     settings = "os", "compiler", "build_type", "arch"
-    exports_sources = "CMakeLists.txt", "src/*", "include/*"
+    exports_sources = "CMakeLists.txt", "src/*", "include/*", "tools/*", "tests/*", "benchmarks/*"
 
     def build_requirements(self):
         self.test_requires("gtest/1.17.0")
