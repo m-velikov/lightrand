@@ -235,16 +235,40 @@ public:
     if (range == std::numeric_limits<std::uint64_t>::max())
       return static_cast<T>(random());
 
-    // Calculate the highest multiple of (range + 1) that fits into a uint64_t.
-    // Numbers above or equal to this limit are rejected to avoid modulo bias.
-    std::uint64_t limit =
-        (std::numeric_limits<std::uint64_t>::max() / (range + 1)) * (range + 1);
+    // Lemire's algorithm and the OpenBSD lower bound method both give numbers
+    // in the open interval [lo, hi), but we want [lo, hi].
+    range += 1;
 
+#ifdef __SIZEOF_INT128__
+    // Daniel Lemire's Fast Random Integer algorithm
+    std::uint64_t u = random();
+    unsigned __int128 m = static_cast<unsigned __int128>(u) *
+                          static_cast<unsigned __int128>(range);
+    auto lm = static_cast<std::uint64_t>(m);
+
+    if (lm < range) [[unlikely]] {
+      // cppcheck-suppress oppositeExpression
+      const std::uint64_t threshold = -range % range;
+      while (lm < threshold) {
+        u = random();
+        m = static_cast<unsigned __int128>(u) *
+            static_cast<unsigned __int128>(range);
+        lm = static_cast<std::uint64_t>(m);
+      }
+    }
+    return static_cast<T>(static_cast<std::uint64_t>(lo) +
+                          static_cast<std::uint64_t>(m >> 64));
+#else
+    // OpenBSD lower bound rejection method.
+
+    // cppcheck-suppress oppositeExpression
+    const std::uint64_t threshold = -range % range;
     std::uint64_t u;
     do {
       u = random();
-    } while (u >= limit);
-    return static_cast<T>(static_cast<std::uint64_t>(lo) + (u % (range + 1)));
+    } while (u < threshold);
+    return static_cast<T>(static_cast<std::uint64_t>(lo) + (u % range));
+#endif
   }
 
   /**

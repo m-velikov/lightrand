@@ -8,7 +8,7 @@
 ## Features
 
 *   **High-Performance PRNG:** Includes `xoshiro256**`, a fast and statistically robust generator suitable for a wide range of applications.
-*   **Bias-Free Integer Generation:** Generates uniform integers within a range using rejection sampling to eliminate modulo bias.
+*   **Bias-Free Integer Generation:** Generates uniform integers within a range using rejection sampling to eliminate modulo bias, using Lemire's algorithm (with `__int128`) when possible and OpenBSD lower bound method otherwise.
 *   **Efficient Normal Distribution:** Implements the Ziggurat algorithm for fast generation of normally distributed random numbers.
 *   **Easy-to-Use API:** A high-level `generator` class simplifies common random number generation tasks.
 *   **Thread-Safety:** Provides a `thread_local` generator instance for safe use in multi-threaded applications.
