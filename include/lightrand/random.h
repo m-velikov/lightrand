@@ -35,8 +35,8 @@ private:
 
 public:
   using result_type = std::uint64_t;
-  [[nodiscard]] static constexpr std::uint64_t min() { return 0; }
-  [[nodiscard]] static constexpr std::uint64_t max() {
+  [[nodiscard]] static constexpr std::uint64_t min() noexcept { return 0; }
+  [[nodiscard]] static constexpr std::uint64_t max() noexcept {
     return std::numeric_limits<std::uint64_t>::max();
   }
 
@@ -62,14 +62,14 @@ public:
    *
    * @param s The new seed value.
    */
-  void seed(std::uint64_t s) { state_ = s; }
+  void seed(std::uint64_t s) noexcept { state_ = s; }
 
   /**
    * @brief Generates the next random number.
    *
    * @return The next random number in the sequence.
    */
-  std::uint64_t operator()() {
+  std::uint64_t operator()() noexcept {
     std::uint64_t z = (state_ += 0x9e3779b97f4a7c15);
     z = (z ^ (z >> 30)) * 0xbf58476d1ce4e5b9;
     z = (z ^ (z >> 27)) * 0x94d049bb133111eb;
@@ -100,8 +100,8 @@ private:
 public:
   using type = std::uint64_t;
   using result_type = std::uint64_t;
-  [[nodiscard]] static constexpr std::uint64_t min() { return 0; }
-  [[nodiscard]] static constexpr std::uint64_t max() {
+  [[nodiscard]] static constexpr std::uint64_t min() noexcept { return 0; }
+  [[nodiscard]] static constexpr std::uint64_t max() noexcept {
     return std::numeric_limits<std::uint64_t>::max();
   }
 
@@ -127,7 +127,7 @@ public:
    *
    * @param s The new seed value.
    */
-  void seed(std::uint64_t s) {
+  void seed(std::uint64_t s) noexcept {
     splitmix64 init(s);
     state_[0] = init();
     state_[1] = init();
@@ -140,7 +140,7 @@ public:
    *
    * @return The next random number in the sequence.
    */
-  std::uint64_t operator()() {
+  std::uint64_t operator()() noexcept {
     const std::uint64_t res = std::rotl(state_[1] * 5, 7) * 9;
 
     const std::uint64_t t = state_[1] << 17;
@@ -192,28 +192,28 @@ public:
    *
    * @param eng The underlying uniform random bit generator (URBG) engine.
    */
-  explicit generator(engine &eng = thread_urbg) : urbg_(eng) {}
+  explicit generator(engine &eng = thread_urbg) noexcept : urbg_(eng) {}
 
   /**
    * @brief Seeds the underlying random number generator.
    *
    * @param s The new seed value.
    */
-  void seed(std::uint64_t s) { urbg_.seed(s); }
+  void seed(std::uint64_t s) noexcept { urbg_.seed(s); }
 
   /**
    * @brief Accesses the underlying uniform random bit generator engine.
    *
    * @return A reference to the underlying engine.
    */
-  engine &eng() { return urbg_; }
+  engine &eng() noexcept { return urbg_; }
 
   /**
    * @brief Generates a raw 64-bit random integer from the engine.
    *
    * @return A uniformly distributed 64-bit unsigned integer.
    */
-  [[nodiscard]] std::uint64_t random() { return urbg_(); }
+  [[nodiscard]] std::uint64_t random() noexcept { return urbg_(); }
 
   /**
    * @brief Generates a uniformly distributed random integer in the closed
@@ -228,8 +228,8 @@ public:
    * @return A uniformly distributed random integer.
    */
   template <std::integral T>
-  [[nodiscard]] T uniform(T lo, T hi = std::numeric_limits<T>::max()) {
-    // Calculate the total number of bounds (the distance between lo and hi)
+  [[nodiscard]] T uniform(T lo, T hi = std::numeric_limits<T>::max()) noexcept {
+    // Calculate the total range (the distance between lo and hi)
     std::uint64_t range =
         static_cast<std::uint64_t>(hi) - static_cast<std::uint64_t>(lo);
     if (range == std::numeric_limits<std::uint64_t>::max())
@@ -282,7 +282,7 @@ public:
    * @tparam T The floating-point type of the generated value.
    * @return A uniformly distributed random floating-point number.
    */
-  template <std::floating_point T> [[nodiscard]] T uniform() {
+  template <std::floating_point T> [[nodiscard]] T uniform() noexcept {
     // Use exactly the number of bits that the floating point type's mantissa
     // can represent
     constexpr int bits = std::numeric_limits<T>::digits < 64
@@ -306,7 +306,7 @@ public:
    * @return A uniformly distributed random floating-point number.
    */
   template <std::floating_point T>
-  [[nodiscard]] T uniform(T lo, T hi = static_cast<T>(1.0)) {
+  [[nodiscard]] T uniform(T lo, T hi = static_cast<T>(1.0)) noexcept {
     T result = std::lerp(lo, hi, uniform<T>());
     return result == hi ? std::nextafter(hi, lo) : result;
   }
@@ -319,7 +319,7 @@ public:
    * @tparam T The floating-point type of the generated value.
    * @return A normally distributed random floating-point number.
    */
-  template <std::floating_point T> [[nodiscard]] T normal() {
+  template <std::floating_point T> [[nodiscard]] T normal() noexcept {
     const auto &zx = ziggurat::x;
 
     for (;;) {
@@ -375,7 +375,7 @@ public:
    * @return A normally distributed random floating-point number.
    */
   template <std::floating_point T>
-  [[nodiscard]] T normal(T mean, T stddev = static_cast<T>(1.0)) {
+  [[nodiscard]] T normal(T mean, T stddev = static_cast<T>(1.0)) noexcept {
     return mean + stddev * normal<T>();
   }
 };

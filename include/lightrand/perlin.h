@@ -8,11 +8,11 @@
 namespace lightrand {
 
 namespace detail {
-inline float smootherstep(float u) {
+inline float smootherstep(float u) noexcept {
   return u * u * u * (u * (6.0f * u - 15.0f) + 10.0f);
 }
 
-inline float interpolate(float a, float b, float u) {
+inline float interpolate(float a, float b, float u) noexcept {
   return std::lerp(a, b, smootherstep(u));
 }
 } // namespace detail
@@ -40,7 +40,7 @@ public:
    * @param gen The random number generator used to create the gradients and
    *            permutation table.
    */
-  explicit perlin1d(generator &gen) : grad(gen) {}
+  explicit perlin1d(generator &gen) noexcept : grad(gen) {}
 
   /**
    * @brief Evaluates the 1D Perlin noise at a given coordinate.
@@ -48,7 +48,7 @@ public:
    * @param x The x-coordinate to evaluate.
    * @return The noise value at the specified coordinate.
    */
-  [[nodiscard]] float eval(float x) const {
+  [[nodiscard]] float eval(float x) const noexcept {
     // Determine grid cell coordinates
     float xi = std::floor(x);
     // Determine relative x position within the cell
@@ -93,7 +93,7 @@ public:
    * @param gen The random number generator used to create the gradients and
    *            permutation table.
    */
-  explicit perlin2d(generator &gen) : ctx(gen) {}
+  explicit perlin2d(generator &gen) noexcept : ctx(gen) {}
 
   /**
    * @brief Evaluates the 2D Perlin noise at given coordinates.
@@ -102,7 +102,7 @@ public:
    * @param y The y-coordinate to evaluate.
    * @return The noise value at the specified coordinates.
    */
-  [[nodiscard]] float eval(float x, float y) const {
+  [[nodiscard]] float eval(float x, float y) const noexcept {
     // Determine grid cell coordinates
     float xi = std::floor(x);
     float yi = std::floor(y);
@@ -171,7 +171,7 @@ public:
    * @param gen The random number generator used to create the gradients and
    *            permutation table.
    */
-  explicit perlin3d(generator &gen) : ctx(gen) {}
+  explicit perlin3d(generator &gen) noexcept : ctx(gen) {}
 
   /**
    * @brief Evaluates the 3D Perlin noise at given coordinates.
@@ -181,7 +181,7 @@ public:
    * @param z The z-coordinate to evaluate.
    * @return The noise value at the specified coordinates.
    */
-  [[nodiscard]] float eval(float x, float y, float z) const {
+  [[nodiscard]] float eval(float x, float y, float z) const noexcept {
     // Determine grid cell coordinates
     float xi = std::floor(x);
     float yi = std::floor(y);

@@ -34,7 +34,7 @@ public:
    * @param gen The random number generator used to create the gradients and
    *            permutation table.
    */
-  explicit simplex2d(generator &gen) : grad(gen) {}
+  explicit simplex2d(generator &gen) noexcept : grad(gen) {}
 
   /**
    * @brief Evaluates the 2D Simplex noise at given coordinates.
@@ -44,7 +44,7 @@ public:
    * @return The noise value at the specified coordinates, roughly in the range
    * [-1.0, 1.0].
    */
-  [[nodiscard]] float eval(float x, float y) const {
+  [[nodiscard]] float eval(float x, float y) const noexcept {
     // Skewing and unskewing factors for 2D
     const float F2 = 0.366025403784439f; // (sqrt(3.0) - 1.0) / 2.0
     const float G2 = 0.211324865405187f; // (3.0 - sqrt(3.0)) / 6.0
@@ -147,7 +147,7 @@ public:
    * @param gen The random number generator used to create the gradients and
    *            permutation table.
    */
-  explicit simplex3d(generator &gen) : ctx(gen) {}
+  explicit simplex3d(generator &gen) noexcept : ctx(gen) {}
 
   /**
    * @brief Evaluates the 3D Simplex noise at given coordinates.
@@ -158,7 +158,7 @@ public:
    * @return The noise value at the specified coordinates, roughly in the range
    * [-1.0, 1.0].
    */
-  [[nodiscard]] float eval(float x, float y, float z) const {
+  [[nodiscard]] float eval(float x, float y, float z) const noexcept {
     // Skewing and unskewing factors for 3D
     const float F3 = 1.0f / 3.0f;
     const float G3 = 1.0f / 6.0f;
