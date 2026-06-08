@@ -5,12 +5,31 @@
 #include <cmath>
 #include <concepts>
 #include <cstdint>
-#include <iostream>
+#include <iosfwd>
 #include <limits>
 #include <optional>
 #include <random>
 
 namespace lightrand {
+
+namespace detail {
+/**
+ * @brief Resolves an optional seed to a concrete 64-bit value.
+ *
+ * Returns the provided seed if present; otherwise draws a fresh seed from
+ * std::random_device.
+ *
+ * @param s An optional seed value.
+ * @return The resolved 64-bit seed.
+ */
+[[nodiscard]] inline std::uint64_t
+resolve_seed(std::optional<std::uint64_t> s) {
+  if (s)
+    return *s;
+  std::random_device rd;
+  return (static_cast<std::uint64_t>(rd()) << 32) | rd();
+}
+} // namespace detail
 
 /**
  * @brief SplitMix64 random number generator.
@@ -47,14 +66,7 @@ public:
    *          be initialized using std::random_device.
    */
   explicit splitmix64(std::optional<std::uint64_t> s = std::nullopt) {
-    std::uint64_t seed_val;
-    if (!s) {
-      std::random_device rd;
-      seed_val = (static_cast<std::uint64_t>(rd()) << 32) | rd();
-    } else {
-      seed_val = *s;
-    }
-    seed(seed_val);
+    seed(detail::resolve_seed(s));
   }
 
   /**
@@ -112,14 +124,7 @@ public:
    *             be initialized using std::random_device.
    */
   explicit xoshiro256starstar(std::optional<std::uint64_t> s = std::nullopt) {
-    std::uint64_t seed_val;
-    if (!s) {
-      std::random_device rd;
-      seed_val = (static_cast<std::uint64_t>(rd()) << 32) | rd();
-    } else {
-      seed_val = *s;
-    }
-    seed(seed_val);
+    seed(detail::resolve_seed(s));
   }
 
   /**
