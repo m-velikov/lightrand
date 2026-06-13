@@ -2,6 +2,7 @@
 
 #include <array>
 #include <bit>
+#include <cassert>
 #include <cmath>
 #include <concepts>
 #include <cstdint>
@@ -307,11 +308,14 @@ public:
    *
    * @tparam T The floating-point type of the generated value.
    * @param lo The lower bound of the range (inclusive).
-   * @param hi The upper bound of the range (exclusive).
+   * @param hi The upper bound of the range (exclusive). Must be strictly
+   *           greater than @p lo: a half-open interval [lo, hi) with lo == hi
+   *           is empty and impossible to satisfy.
    * @return A uniformly distributed random floating-point number.
    */
   template <std::floating_point T>
   [[nodiscard]] T uniform(T lo, T hi = static_cast<T>(1.0)) noexcept {
+    assert(lo < hi && "uniform(lo, hi) requires lo < hi: [lo, hi) is empty");
     T result = std::lerp(lo, hi, uniform<T>());
     return result == hi ? std::nextafter(hi, lo) : result;
   }
