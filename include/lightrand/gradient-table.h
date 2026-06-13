@@ -24,9 +24,9 @@ struct vec2 {
     return a.x * b.x + a.y * b.y;
   }
   void normalize() noexcept {
-    auto d = dot(*this, *this);
-    x /= std::sqrt(d);
-    y /= std::sqrt(d);
+    auto inv = 1.0f / std::sqrt(dot(*this, *this));
+    x *= inv;
+    y *= inv;
   }
 
   float x, y;
@@ -37,10 +37,10 @@ struct vec3 {
     return a.x * b.x + a.y * b.y + a.z * b.z;
   }
   void normalize() noexcept {
-    auto d = dot(*this, *this);
-    x /= std::sqrt(d);
-    y /= std::sqrt(d);
-    z /= std::sqrt(d);
+    auto inv = 1.0f / std::sqrt(dot(*this, *this));
+    x *= inv;
+    y *= inv;
+    z *= inv;
   }
 
   float x, y, z;
