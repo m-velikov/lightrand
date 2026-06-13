@@ -8,7 +8,6 @@
 #include <cmath>
 #include <cstdint>
 #include <numeric>
-#include <type_traits>
 
 namespace lightrand::detail {
 
@@ -46,6 +45,31 @@ struct vec3 {
   float x, y, z;
 };
 
+// Draws a single random gradient. Overloaded per gradient type, so an
+// unsupported GradientType simply fails to resolve at compile time.
+inline void init_gradient(float &g, generator &gen) noexcept {
+  do {
+    g = gen.normal<float>();
+  } while (g == 0.0f);
+  g = std::copysign(1.0f, g);
+}
+
+inline void init_gradient(vec2 &g, generator &gen) noexcept {
+  do {
+    g = {.x = gen.normal<float>(), .y = gen.normal<float>()};
+  } while (g.x == 0.0f && g.y == 0.0f);
+  g.normalize();
+}
+
+inline void init_gradient(vec3 &g, generator &gen) noexcept {
+  do {
+    g = {.x = gen.normal<float>(),
+         .y = gen.normal<float>(),
+         .z = gen.normal<float>()};
+  } while (g.x == 0.0f && g.y == 0.0f && g.z == 0.0f);
+  g.normalize();
+}
+
 template <typename GradientType, std::uint32_t TABLE_SIZE>
 class gradient_table {
   static_assert(std::has_single_bit(TABLE_SIZE),
@@ -81,30 +105,8 @@ public:
 
 private:
   void init_gradients(generator &gen) noexcept {
-    if constexpr (std::is_same_v<GradientType, float>) {
-      for (auto &g : grad) {
-        do {
-          g = gen.normal<float>();
-        } while (g == 0.0f);
-        g = std::copysign(1.0f, g);
-      }
-    } else if constexpr (std::is_same_v<GradientType, vec2>) {
-      for (auto &g : grad) {
-        do {
-          g = {.x = gen.normal<float>(), .y = gen.normal<float>()};
-        } while (g.x == 0.0f && g.y == 0.0f);
-        g.normalize();
-      }
-    } else if constexpr (std::is_same_v<GradientType, vec3>) {
-      for (auto &g : grad) {
-        do {
-          g = {.x = gen.normal<float>(),
-               .y = gen.normal<float>(),
-               .z = gen.normal<float>()};
-        } while (g.x == 0.0f && g.y == 0.0f && g.z == 0.0f);
-        g.normalize();
-      }
-    }
+    for (auto &g : grad)
+      init_gradient(g, gen);
   }
 };
 
