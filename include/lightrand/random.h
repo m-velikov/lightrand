@@ -146,18 +146,32 @@ public:
    * @return The next random number in the sequence.
    */
   std::uint64_t operator()() noexcept {
-    const std::uint64_t res = std::rotl(state_[1] * 5, 7) * 9;
+    std::uint64_t s0 = state_[0], s1 = state_[1], s2 = state_[2],
+                  s3 = state_[3];
+#if defined(__GNUC__) || defined(__clang__)
+    // Force the state into scalar registers or a compiler may SLP-pack the load
+    // into a vector while storing the updated state as scalars, which defeats
+    // store-to-load forwarding.
+    asm volatile("" : "+r"(s0), "+r"(s1), "+r"(s2), "+r"(s3));
+#endif
 
-    const std::uint64_t t = state_[1] << 17;
+    const std::uint64_t res = std::rotl(s1 * 5, 7) * 9;
 
-    state_[2] ^= state_[0];
-    state_[3] ^= state_[1];
-    state_[1] ^= state_[2];
-    state_[0] ^= state_[3];
+    const std::uint64_t t = s1 << 17;
 
-    state_[2] ^= t;
+    s2 ^= s0;
+    s3 ^= s1;
+    s1 ^= s2;
+    s0 ^= s3;
 
-    state_[3] = std::rotl(state_[3], 45);
+    s2 ^= t;
+
+    s3 = std::rotl(s3, 45);
+
+    state_[0] = s0;
+    state_[1] = s1;
+    state_[2] = s2;
+    state_[3] = s3;
 
     return res;
   }
