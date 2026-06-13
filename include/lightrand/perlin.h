@@ -1,3 +1,5 @@
+#pragma once
+
 #include "gradient-table.h"
 #include "random.h"
 
