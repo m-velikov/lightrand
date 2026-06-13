@@ -111,7 +111,6 @@ private:
   friend std::istream &operator>>(std::istream &, xoshiro256starstar &);
 
 public:
-  using type = std::uint64_t;
   using result_type = std::uint64_t;
   [[nodiscard]] static constexpr std::uint64_t min() noexcept { return 0; }
   [[nodiscard]] static constexpr std::uint64_t max() noexcept {
